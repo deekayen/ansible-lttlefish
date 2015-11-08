@@ -1,5 +1,8 @@
 # lttle-ansible-bootstrap
 
+I don't really intend for this repo to be consumed as a generic, re-usable
+configuration. It's strictly intended to meet my personal needs.
+
 Installs and configures various things with:
 
 * Apache
