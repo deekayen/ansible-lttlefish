@@ -1,0 +1,76 @@
+---
+
+- name: Update apt cache if needed.
+  apt: update_cache=yes cache_valid_time=3600
+
+- name: "Install Apache"
+  apt: "name={{ item }} state=latest"
+  with_items:
+    - apache2
+    - apache2-bin
+    - apache2-data
+    - apache2-utils
+    - apachetop
+
+- name: Disable Apache CGI module.
+  apache2_module: state=absent name=cgi
+
+- name: Enable Apache SSL module.
+  apache2_module: state=present name=ssl
+
+- name: Enable Apache headers module.
+  apache2_module: state=present name=headers
+
+- name: Copy Apache ServerName to prevent notices.
+  template: src=httpd.conf.j2 dest=/etc/apache2/conf-available/httpd.conf
+
+- name: Enable Apache httpd configuration file.
+  command: /usr/sbin/a2enconf httpd
+
+- name: "Install PHP"
+  apt: "name={{ item }} state=latest"
+  with_items:
+    - php-pear
+    - php-xml-parser
+    - php5
+    - php5-apcu
+    - php5-cgi
+    - php5-cli
+    - php5-common
+    - php5-curl
+    - php5-dev
+    - php5-gd
+    - php5-imagick
+    - php5-intl
+    - php5-json
+    - php5-mcrypt
+    - php5-mysql
+    - php5-pgsql
+    - php5-readline
+    - php5-recode
+    - php5-sqlite
+    - php5-xmlrpc
+
+- name: Install Python software properties
+  apt: name=python-software-properties state=latest
+
+- name: Check if MariaDB is already installed.
+  stat: path=/etc/init.d/mysql
+  register: mariadb_installed
+
+- name: Update apt cache if MariaDB is not yet installed.
+  apt: update_cache=yes
+  when: mariadb_installed.stat.exists == false
+
+- name: Install MariaDB Server
+  apt: name={{ item }} state=latest
+  with_items:
+    - mariadb-server
+    - mariadb-client
+    - mariadb-common
+    - python-mysqldb
+  register: mariadb_install_packages
+
+- include: secure-mariadb.yml
+- include: lamp_scripts.yml
+- include: hosts.yml

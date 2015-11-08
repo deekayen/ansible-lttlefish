@@ -1,0 +1,12 @@
+---
+- name: Configure a lttle Debian-based Linode.
+  hosts: linodesandbox
+  user: root
+
+  roles:
+    - system
+    - security
+    - ntp
+    - lamp
+    - mail
+    - openvpn

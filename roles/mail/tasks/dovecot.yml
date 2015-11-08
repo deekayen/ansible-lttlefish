@@ -1,0 +1,18 @@
+---
+
+- name: Copy Dovecot configuration files.
+  copy: src={{item.src}} dest={{item.dest}} owner=root group=root mode=644 backup=yes
+  with_items:
+    - { src: 'dovecot/10-auth.conf', dest: '/etc/dovecot/conf.d/10-auth.conf' }
+    - { src: 'dovecot/10-mail.conf', dest: '/etc/dovecot/conf.d/10-mail.conf' }
+    - { src: 'dovecot/10-master.conf', dest: '/etc/dovecot/conf.d/10-master.conf' }
+    - { src: 'dovecot/10-ssl.conf', dest: '/etc/dovecot/conf.d/10-ssl.conf' }
+    - { src: 'dovecot/20-imap.conf', dest: '/etc/dovecot/conf.d/20-imap.conf' }
+    - { src: 'dovecot/auth-sql.conf.ext', dest: '/etc/dovecot/conf.d/auth-sql.conf.ext' }
+
+- name: Copy Dovecot configuration templates.
+  template: src={{item.src}} dest={{item.dest}} owner=root group=root mode=644 backup=yes
+  with_items:
+    - { src: 'dovecot/15-lda.conf.j2', dest: '/etc/dovecot/conf.d/15-lda.conf' }
+    - { src: 'dovecot/dovecot-sql.conf.ext.j2', dest: '/etc/dovecot/dovecot-sql.conf.ext' }
+    - { src: 'dovecot/dovecot.conf.j2', dest: '/etc/dovecot/dovecot.conf' }

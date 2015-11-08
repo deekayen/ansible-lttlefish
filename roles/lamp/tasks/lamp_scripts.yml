@@ -1,0 +1,49 @@
+---
+- name: "Install Squirrelmail"
+  apt: "name={{ item }} state=latest"
+  with_items:
+    - squirrelmail
+    - squirrelmail-decode
+    - squirrelmail-locales
+    - squirrelmail-viewashtml
+
+- name: Install ownCloud repository.
+  apt_repository: repo='deb http://download.opensuse.org/repositories/isv:/ownCloud:/community/Debian_8.0/ /' state=present
+
+- name: Add ownCloud repository key to the system.
+  apt_key: url=http://download.opensuse.org/repositories/isv:ownCloud:community/Debian_8.0/Release.key state=present
+
+- name: Update apt cache to add ownCloud repo key.
+  apt: update_cache=yes
+
+- name: Install ownCloud.
+  apt: "name={{ item }} state=latest"
+  with_items:
+    - owncloud
+    - owncloud-3rdparty
+    - owncloud-app-activity
+    - owncloud-app-encryption
+    - owncloud-app-external
+    - owncloud-app-files
+    - owncloud-app-files-external
+    - owncloud-app-files-locking
+    - owncloud-app-files-pdfviewer
+    - owncloud-app-files-sharing
+    - owncloud-app-files-texteditor
+    - owncloud-app-files-trashbin
+    - owncloud-app-files-versions
+    - owncloud-app-files-videoviewer
+    - owncloud-app-firstrunwizard
+    - owncloud-app-gallery
+    - owncloud-app-provisioning-api
+    - owncloud-app-templateeditor
+    - owncloud-app-user-external
+    - owncloud-app-user-ldap
+    - owncloud-app-user-webdavauth
+    - owncloud-config-apache
+    - owncloud-server
+    - libreoffice-writer
+    - clamav
+    - clamav-daemon
+
+

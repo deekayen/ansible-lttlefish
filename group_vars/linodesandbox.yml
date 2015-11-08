@@ -1,0 +1,22 @@
+---
+ansible_ssh_user: root
+
+# Usable for Apache and misc server reports
+server_admin: david@example.com
+
+# Possible values include: debug, info, notice, warn, error, crit, alert, emerg.
+apache_log_level: crit
+
+linode_dns_resolver1: 75.127.97.6
+linode_dns_resolver2: 75.127.97.7
+
+openvpn_tcp_port: 1194
+openvpn_udp_port: 1194
+
+mysql_root_password: changeme
+
+# Dovecot max IMAP connections from one IP. default 10
+mail_max_userip_connections: 20
+mailserver_dbname: mailserver
+mailserver_dbuser: mailuser
+mailserver_dbpass: changeme

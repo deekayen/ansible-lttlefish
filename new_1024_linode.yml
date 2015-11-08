@@ -1,0 +1,20 @@
+---
+- hosts: 127.0.0.1
+  connection: local
+  tasks:
+    - name: Create a 1024 Debian 8.1 Linode in Atlanta
+      linode:
+        api_key: 'uKjIAZI3M2Dkt4LkE6t5KkatnFejiABKDj1qo1YCC47xOoKnGktGSYjL58FWPRtc'
+        name: ansible
+        # 1 = 1024
+        plan: 1
+        # 4 = Atlanta
+        datacenter: 4
+        # 140 = Debian 8.1
+        distribution: 140
+        # omit password to make a random one
+        ssh_pub_key: 'ssh-rsa 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 deekayen@example.com'
+        swap: 1024
+        wait: yes
+        wait_timeout: 600
+        state: present

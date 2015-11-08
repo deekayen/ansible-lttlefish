@@ -1,0 +1,64 @@
+---
+- name: Update apt cache if needed.
+  apt: update_cache=yes cache_valid_time=3600
+
+- name: Remove exim.
+  apt: name={{ item }} state=absent purge=yes
+  with_items:
+    - exim4
+    - exim4-base
+    - exim4-config
+    - exim4-daemon-light
+
+- name: Install Dovecot.
+  apt: name={{ item }} state=latest
+  with_items:
+    - dovecot-core
+    - dovecot-imapd
+    - dovecot-lmtpd
+    - dovecot-mysql
+    - dovecot-pop3d
+
+- name: Install Postfix.
+  apt: name={{ item }} state=latest
+  with_items:
+    - postfix
+    - postfix-mysql
+    - postfix-policyd-spf-python
+
+- name: Install ClamAV.
+  apt: name={{ item }} state=latest
+  with_items:
+    - clamav
+    - clamav-base
+    - clamav-freshclam
+
+- name: Install OpenDKIM.
+  apt: name={{ item }} state=latest
+  with_items:
+    - opendkim
+    - opendkim-tools
+
+- name: Install procmail.
+  apt: name=procmail state=latest
+
+- name: Copy mailserver table SQL.
+  copy: src=mailserver.sql dest=/tmp/mailserver.sql
+
+- name: Create a database for mail configuration.
+  mysql_db: name=mailserver state=present
+
+- name: Import mailserver database tables.
+  # The import SQL file should have IF EXISTS on each CREATE.
+  mysql_db: name=mailserver state=import target=/tmp/mailserver.sql
+
+- name: Create a database user for mail.
+  mysql_user: name="{{ mailserver_dbuser }}"
+            password="{{ mailserver_dbpass }}"
+            priv="mailserver.*:SELECT"
+            login_user="root"
+            login_password="{{ mysql_root_password }}"
+            state=present
+
+- include: dovecot.yml
+- include: postfix.yml

@@ -1,0 +1,5 @@
+user = {{ mailserver_dbuser }}
+password = {{ mailserver_dbpass }}
+hosts = 127.0.0.1
+dbname = {{ mailserver_dbname }}
+query = SELECT destination FROM virtual_aliases WHERE source='%s'

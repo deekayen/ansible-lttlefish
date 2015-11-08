@@ -1,0 +1,5 @@
+<VirtualHost {{ ansible_default_ipv4.address }}:80 [{{ ansible_default_ipv6.address }}]:80>
+   ServerName pool.ntp.org
+   ServerAlias *.pool.ntp.org *.ntppool.org
+   Redirect permanent / http://www.pool.ntp.org/
+</VirtualHost>

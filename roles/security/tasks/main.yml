@@ -1,0 +1,13 @@
+---
+- name: Update apt cache if needed.
+  apt: update_cache=yes cache_valid_time=3600
+
+# Wasn't supported in Jessie and doesn't support IPv6 anyway
+#- name: Install denyhosts.
+#  apt: name=denyhosts state=latest
+
+- name: Install unattended-upgrades.
+  apt: name=unattended-upgrades state=latest
+
+- name: Ignore pings
+  sysctl: name="net.ipv4.icmp_echo_ignore_all" value=1 sysctl_set=yes state=present reload=yes

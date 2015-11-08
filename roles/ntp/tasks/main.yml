@@ -1,0 +1,13 @@
+---
+- name: Update apt cache if needed.
+  apt: update_cache=yes cache_valid_time=3600
+
+- name: Install NTP if needed.
+  apt: name=ntp state=latest
+
+- name: Set maximum tracked connections to 393216
+  sysctl: name="net.netfilter.nf_conntrack_max" value=393216 sysctl_set=yes state=present reload=yes
+
+- name: Copy ntp.conf.
+  copy: src=ntp.conf dest=/etc/ntp.conf owner=root group=root mode=644 backup=yes
+  notify: restart ntpd

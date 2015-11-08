@@ -1,0 +1,26 @@
+---
+- name: Update apt cache if needed.
+  apt: update_cache=yes cache_valid_time=3600
+
+- name: Ensure cron is installed.
+  apt: name=cron state=latest
+
+- name: Set cron to restart dnsmasq
+  cron: name="Flush dnsmasq caches" minute="8" hour="4" job="/usr/sbin/service dnsmasq restart >/dev/null 2>&1"
+
+- name: Enable IPv4 forwarding
+  sysctl: name="net.ipv4.ip_forward" value=1 sysctl_set=yes state=present reload=yes
+
+- name: Install OpenVPN server.
+  apt: name={{ item }} state=latest update_cache=yes
+  with_items:
+    - openvpn
+    - easy-rsa
+    - dnsmasq
+    - dnsmasq-base
+
+- name: Add TCP configuration.
+  template: src=tcp.j2 dest=/etc/openvpn/tcp.conf
+
+- name: Add UDP configuration.
+  template: src=udp.j2 dest=/etc/openvpn/udp.conf

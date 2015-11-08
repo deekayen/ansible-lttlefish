@@ -1,0 +1,118 @@
+# See /usr/share/postfix/main.cf.dist for a commented, more complete version
+
+
+# Debian specific:  Specifying a file name will cause the first
+# line of that file to be used as the name.  The Debian default
+# is /etc/mailname.
+#myorigin = /etc/mailname
+
+smtpd_banner = $myhostname ESMTP $mail_name (Debian/GNU)
+biff = no
+
+# 100M
+message_size_limit = 102400000
+
+# appending .domain is the MUA's job.
+append_dot_mydomain = no
+
+# Uncomment the next line to generate "delayed mail" warnings
+#delay_warning_time = 4h
+
+readme_directory = no
+
+# TLS parameters
+smtpd_tls_cert_file=/etc/ssl/private/deekayen.chained.crt
+smtpd_tls_key_file=/etc/ssl/private/deekayen.key
+smtpd_use_tls=yes
+#smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
+#smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+smtpd_tls_auth_only=yes
+smtpd_tls_security_level=may
+#smtpd_tls_exclude_ciphers = aNULL
+# I would like to dictate ciphers, but encryption is optional anyway
+#smtpd_tls_ciphers = medium
+smtpd_tls_exclude_ciphers = aNULL, eNULL, EXPORT, DES, RC4, MD5, PSK, aECDH, EDH-DSS-DES-CBC3-SHA, EDH-RSA-DES-CDC3-SHA, KRB5-DE5, CBC3-SHA
+#Seems like Vanguard might only support SSLv3
+smtpd_tls_protocols = !SSLv2
+# mandatory is for when security level = encrypt instead of may
+#smtpd_tls_mandatory_ciphers = high
+#smtpd_tls_mandatory_exclude_ciphers = aNULL, MD5, RC2, RC4, DES
+#smtpd_tls_mandatory_protocols = !SSLv2
+#tls_preempt_cipherlist=yes
+smtpd_tls_dh1024_param_file = /etc/ssl/dh3072.pem
+
+# See /usr/share/doc/postfix/TLS_README.gz in the postfix-doc package for
+# information on enabling SSL in the smtp client.
+
+#Enabling SMTP for authenticated users, and handing off authentication to Dovecot
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+smtpd_sasl_auth_enable = yes
+
+# David's custom abuse settings
+smtpd_client_connection_rate_limit = 20
+smtpd_client_message_rate_limit = 20
+
+header_checks = regexp:/etc/postfix/header_checks
+body_checks = regexp:/etc/postfix/body_checks
+
+smtpd_helo_restrictions =
+  check_helo_access regexp:/etc/postfix/helo_restrictions
+
+smtpd_recipient_restrictions =
+  permit_sasl_authenticated,
+  permit_mynetworks,
+  reject_unauth_destination,
+  permit_dnswl_client swl.spamhaus.org,
+  permit_dnswl_client accredit.habeas.com,
+  permit_dnswl_client wl.mailspike.net=127.0.0.20,
+  permit_dnswl_client query.bondedsender.org,
+  permit_rhswl_client hostkarma.junkemailfilter.com=127.0.0.1,
+  permit_dnswl_client hostkarma.junkemailfilter.com=127.0.0.1,
+  reject_rbl_client zen.spamhaus.org,
+  reject_rbl_client dnsbl-1.uceprotect.net,
+  reject_rbl_client truncate.gbudb.net,
+  reject_rbl_client psbl.surriel.com,
+  reject_rbl_client bl.mailspike.net=127.0.0.[10..11],
+  reject_rbl_client hostkarma.junkemailfilter.com=127.0.0.2,
+  reject_rbl_client dnsbl.sorbs.net=127.0.0.[2..6],
+  reject_rbl_client b.barracudacentral.org,
+  check_policy_service unix:private/policy-spf
+
+smtpd_sender_restrictions =
+  reject_unknown_sender_domain,
+  reject_rhsbl_sender hostkarma.junkemailfilter.com=127.0.0.2
+
+myhostname = deekayen.net
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+myorigin = /etc/mailname
+mydestination = localhost
+relayhost =
+mynetworks = 127.0.0.0/8 {{ ansible_default_ipv4.address }}/32 [::ffff:127.0.0.0]/104 [::1]/128 [{{ ansible_default_ipv6.address }}]/128
+mailbox_command = procmail -a "$EXTENSION"
+mailbox_size_limit = 0
+recipient_delimiter = +
+inet_protocols = all
+inet_interfaces = {{ ansible_default_ipv4.address }} [{{ ansible_default_ipv6.address }}]
+
+#Handing off local delivery to Dovecot's LMTP, and telling it where to store mail
+virtual_transport = lmtp:unix:private/dovecot-lmtp
+
+#Virtual domains, users, and aliases
+virtual_mailbox_domains = mysql:/etc/postfix/mysql-virtual-mailbox-domains.cf
+virtual_mailbox_maps = mysql:/etc/postfix/mysql-virtual-mailbox-maps.cf
+virtual_alias_maps = mysql:/etc/postfix/mysql-virtual-alias-maps.cf
+#content_filter = smtp-amavis:[127.0.0.1]:10024
+
+policy-spf_time_limit = 3600s
+
+# DKIM
+milter_default_action = accept
+milter_protocol = 2
+smtpd_milters = inet:localhost:12345
+non_smtpd_milters = inet:localhost:12345
+
+anvil_rate_time_unit = 10s
+
+smtpd_relay_restrictions = permit_sasl_authenticated, permit_mynetworks, reject_unauth_destination

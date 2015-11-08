@@ -1,0 +1,18 @@
+/c5b1fcb6e382006f41ea1c84a48fd3ab/ REJECT  Go piss on a transformer.
+/solvantmail/   REJECT  Go piss on a transformer.
+/delux1512/     REJECT  Go piss on a transformer.
+/\blottery/     REJECT  You can keep your spam (0).
+/\blotto\b/     REJECT  You can keep your spam (1).
+/\bpenis\b/     REJECT  You can keep your spam (3).
+/\bviagra\b/      REJECT  You can keep your spam (4).
+/\bsoma\b/      REJECT  You can keep your spam (5).
+/\blevitra\b/     REJECT  You can keep your spam (6).
+/\bambien\b/      REJECT  You can keep your spam (7).
+/\bphentermine\b/   REJECT  You can keep your spam (8).
+/\btramadol\b/      REJECT  You can keep your spam (9).
+/\borgasms\b/     REJECT  You can keep your spam (10).
+/\bzyrtec\b/      REJECT  You can keep your spam (11).
+/\w+\.in\.net\b/  REJECT  I dont know or want email from anyone in India (12).
+/yandex\.ru/    REJECT I dont know any Russians (13).
+/\w+\.com\.vn\b/        REJECT I dont know anyone in Vietnam (14).
+/\w+\.com\.au\b/        REJECT I dont know anyone in Australia (15).

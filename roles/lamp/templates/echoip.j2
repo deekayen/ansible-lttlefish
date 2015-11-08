@@ -1,0 +1,21 @@
+<VirtualHost {{ ansible_default_ipv4.address }}:80 [{{ ansible_default_ipv6.address }}]:80>
+  ServerName echoip.info
+  ServerAlias *.echoip.info
+  ServerAdmin {{ server_admin }}
+
+  DocumentRoot /var/echoip
+  <Directory /var/echoip/>
+    Options -Indexes +FollowSymLinks -MultiViews
+    AllowOverride None
+    Require all granted
+  </Directory>
+
+  ErrorLog ${APACHE_LOG_DIR}/echoip-error.log
+
+  # Possible values include: debug, info, notice, warn, error, crit,
+  # alert, emerg.
+  LogLevel {{ apache_log_level }}
+
+  CustomLog ${APACHE_LOG_DIR}/echoip-access.log common
+
+</VirtualHost>
