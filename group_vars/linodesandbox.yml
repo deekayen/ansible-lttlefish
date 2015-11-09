@@ -1,6 +1,8 @@
 ---
 ansible_ssh_user: root
 
+hostname: lttlesandbox
+
 # Usable for Apache and misc server reports
 server_admin: david@example.com
 

@@ -1,9 +1,10 @@
 ---
 
-- include: debian_upgrade.yml
+- hostname: name="{{ hostname }}"
 
-- name: Update apt cache if needed.
-  apt: update_cache=yes cache_valid_time=3600
+- name: Update packages
+  apt: upgrade=safe update_cache=yes
+  when: ansible_os_family == 'Debian'
 
 - name: Install system utilities.
   apt: "name={{ item }} state=latest"
@@ -43,4 +44,3 @@
     - xz-utils
     - zip
     - zoo
-
