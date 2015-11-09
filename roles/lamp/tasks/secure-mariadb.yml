@@ -14,7 +14,7 @@
     mysql -u root -NBe
     'SET PASSWORD FOR "root"@"{{ item }}" = PASSWORD("{{ mysql_root_password }}");'
   with_items: mysql_root_hosts.stdout_lines
-  when: mariadb_install_packages | bool
+  when: mariadb_install_packages.changed == true
 
 # Has to be after the root password assignment, for idempotency.
 - name: Copy .my.cnf file with root password credentials.
