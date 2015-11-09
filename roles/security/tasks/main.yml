@@ -9,5 +9,8 @@
 - name: Install unattended-upgrades.
   apt: name=unattended-upgrades state=latest
 
+- name: Activate unattended-upgrades.
+  copy: src=20auto-upgrades dest=/etc/apt/apt.conf.d/20auto-upgrades owner=root group=root mode=644
+
 - name: Ignore pings
   sysctl: name="net.ipv4.icmp_echo_ignore_all" value=1 sysctl_set=yes state=present reload=yes
