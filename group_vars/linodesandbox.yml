@@ -19,7 +19,7 @@ owncloud_dbpass: changeme
 openvpn_tcp_port: 1194
 openvpn_udp_port: 1194
 
-mysql_root_password: changeme
+mariadb_root_password: changeme
 
 # Dovecot max IMAP connections from one IP. default 10
 mail_max_userip_connections: 20

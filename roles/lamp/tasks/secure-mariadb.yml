@@ -1,22 +1,17 @@
 ---
 
-# https://github.com/geerlingguy/ansible-role-mysql/blob/master/tasks/secure-installation.yml
-
 - name: Get list of hosts for the root user.
   command: mysql -NBe 'SELECT Host FROM mysql.user WHERE User = "root" ORDER BY (Host="localhost") ASC'
-  register: mysql_root_hosts
+  register: mariadb_root_hosts
   changed_when: false
 
-# Note: We do not use mysql_user for this operation, as it doesn't always update
-# the root password correctly. See: https://goo.gl/MSOejW
 - name: Update MySQL root password for localhost root account.
   shell: >
     mysql -u root -NBe
-    'SET PASSWORD FOR "root"@"{{ item }}" = PASSWORD("{{ mysql_root_password }}");'
-  with_items: mysql_root_hosts.stdout_lines
+    'SET PASSWORD FOR "root"@"{{ item }}" = PASSWORD("{{ mariadb_root_password }}");'
+  with_items: mariadb_root_hosts.stdout_lines
   when: mariadb_install_packages.changed == true
 
-# Has to be after the root password assignment, for idempotency.
 - name: Copy .my.cnf file with root password credentials.
   template:
     src: "user-my.cnf.j2"
@@ -27,15 +22,15 @@
 
 - name: Get list of hosts for the anonymous user.
   command: mysql -NBe 'SELECT Host FROM mysql.user WHERE User = ""'
-  register: mysql_anonymous_hosts
+  register: mariadb_anonymous_hosts
   changed_when: false
 
-- name: Remove anonymous MySQL users.
+- name: Remove anonymous MariaDB users.
   mysql_user:
      name: ""
      host: "{{ item }}"
      state: "absent"
-  with_items: mysql_anonymous_hosts.stdout_lines
+  with_items: mariadb_anonymous_hosts.stdout_lines
 
-- name: Remove MySQL test database.
+- name: Remove MariaDB test database.
   mysql_db: name="test" state="absent"
