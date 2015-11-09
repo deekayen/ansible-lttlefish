@@ -50,6 +50,8 @@
     - php5-recode
     - php5-sqlite
     - php5-xmlrpc
+    - libapache2-mod-php5
+  notify: restart apache2
 
 - name: Install Python software properties
   apt: name=python-software-properties state=latest

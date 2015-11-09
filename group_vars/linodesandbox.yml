@@ -12,6 +12,10 @@ apache_log_level: crit
 linode_dns_resolver1: 75.127.97.6
 linode_dns_resolver2: 75.127.97.7
 
+owncloud_dbname: owncloud
+owncloud_dbuser: owncloud
+owncloud_dbpass: changeme
+
 openvpn_tcp_port: 1194
 openvpn_udp_port: 1194
 

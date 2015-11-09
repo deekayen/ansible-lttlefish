@@ -46,4 +46,11 @@
     - clamav
     - clamav-daemon
 
+- name: Create a database for ownCloud.
+  mysql_db: name={{ owncloud_dbname }} state=present
 
+- name: Create a database user for ownCloud.
+  mysql_user: name="{{ owncloud_dbuser }}"
+            password="{{ owncloud_dbpass }}"
+            priv="owncloud.*:ALL"
+            state=present
