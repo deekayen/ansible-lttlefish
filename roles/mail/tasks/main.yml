@@ -47,17 +47,19 @@
 
 - name: Create a database for mail configuration.
   mysql_db: name="{{ mailserver_dbname }}" state=present
+  register: mailserver_db_created
 
 - name: Import mailserver database tables.
   # The import SQL file should have IF EXISTS on each CREATE.
   mysql_db: name="{{ mailserver_dbname }}" state=import target=/tmp/mailserver.sql
+  when: mailserver_db_created.changed == true
 
 - name: Create a database user for mail.
   mysql_user: name="{{ mailserver_dbuser }}"
             password="{{ mailserver_dbpass }}"
             priv="{{ mailserver_dbname }}.*:SELECT"
             login_user="root"
-            login_password="{{ mysql_root_password }}"
+            login_password="{{ mariadb_root_password }}"
             state=present
 
 - include: dovecot.yml
