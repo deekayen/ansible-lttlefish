@@ -27,4 +27,4 @@
 /\.[a-z]+\/l\/lc[A-Z0-9]{10,}\/[A-Z0-9]{12,}/   REJECT Looks like spam (27).
 /http:\/\/[a-z]+\.[a-z]{3,4}\/[A-Za-z0-9]{20}/  REJECT Looks like spam (28).
 /ship[ping|ment]+\/receiving/   REJECT Looks like re-mailer scam spam (29).
-/yandex\.ru/    REJECT I don't know any Russians (30).
+/yandex/    REJECT I don't know any Russians (30).

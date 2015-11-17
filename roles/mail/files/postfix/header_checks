@@ -12,7 +12,8 @@
 /\btramadol\b/      REJECT  You can keep your spam (9).
 /\borgasms\b/     REJECT  You can keep your spam (10).
 /\bzyrtec\b/      REJECT  You can keep your spam (11).
-/\w+\.in\.net\b/  REJECT  I dont know or want email from anyone in India (12).
+/\w+\.in\.net\b/  REJECT  I dont know anyone in or want email from India (12).
 /yandex\.ru/    REJECT I dont know any Russians (13).
 /\w+\.com\.vn\b/        REJECT I dont know anyone in Vietnam (14).
 /\w+\.com\.au\b/        REJECT I dont know anyone in Australia (15).
+/gmx\.com\b/    REJECT  The only mail I get from GMX is spam (16).
