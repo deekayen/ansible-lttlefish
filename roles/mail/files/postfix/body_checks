@@ -28,3 +28,5 @@
 /http:\/\/[a-z]+\.[a-z]{3,4}\/[A-Za-z0-9]{20}/  REJECT Looks like spam (28).
 /ship[ping|ment]+\/receiving/   REJECT Looks like re-mailer scam spam (29).
 /yandex/    REJECT I don't know any Russians (30).
+/Michael Kors/  REJECT I don't want your junk (31).
+/Medicare.?Open.?Enrollment/i   REJECT Looks like spam (32).
