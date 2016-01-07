@@ -77,6 +77,8 @@
     - python-mysqldb
   register: mariadb_install_packages
 
+- include: secure-apache.yml
 - include: secure-mariadb.yml
 - include: lamp_scripts.yml
 - include: hosts.yml
+- include: owncloud.yml

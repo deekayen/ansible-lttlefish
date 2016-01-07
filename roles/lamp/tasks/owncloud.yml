@@ -1,0 +1,12 @@
+---
+
+- name: Install random password generator.
+  apt: "name={{ item }} state=latest"
+  with_items:
+    - pwgen
+
+- name: Generate a random password for the ownCloud database connection.
+  shell: pwgen -B -s 24 1
+  register: owncloud_password
+  ignore_errors: false
+
