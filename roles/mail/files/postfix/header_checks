@@ -18,3 +18,7 @@
 /\w+\.com\.au\b/        REJECT I dont know anyone in Australia (15).
 /gmx\.com\b/    REJECT  The only mail I get from GMX is spam (16).
 /X-PHP-Originating-Script:\W+[0-9]+:index\.php/ REJECT Looks like spam (17).
+/Kors/  REJECT  I wont ever buy Michael Kors stuff (18).
+/Fox News/      REJECT Its unlikely I asked for news from Fox by email (19).
+/Rayban/        REJECT  I dont wear sunglasses (20).
+/G700/          REJECT  That is an odd spam topic (21).
