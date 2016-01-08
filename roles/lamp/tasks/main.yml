@@ -29,7 +29,7 @@
 
 - name: Enable Apache httpd configuration file.
   command: /usr/sbin/a2enconf httpd
-  when: apache_httpd_conf.stat.islnk == False
+  when: apache_httpd_conf.stat.islnk is not defined
 
 - name: "Install PHP"
   apt: "name={{ item }} state=latest"
