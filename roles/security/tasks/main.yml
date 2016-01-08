@@ -14,3 +14,6 @@
 
 - name: Ignore pings.
   sysctl: name="net.ipv4.icmp_echo_ignore_all" value=1 sysctl_set=yes state=present reload=yes
+
+- name: Whitelist some addresses.
+  template: src=hosts.allow.j2 dest=/etc/hosts.allow owner=root group=root mode=644

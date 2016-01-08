@@ -7,6 +7,9 @@
     - squirrelmail-locales
     - squirrelmail-viewashtml
 
+- name: Configure Squirrelmail.
+  template: src=squirrelmail.php.j2 dest=/etc/squirrelmail/config.php owner=root group=root mode=644
+
 - name: Install ownCloud repository.
   apt_repository: repo='deb http://download.opensuse.org/repositories/isv:/ownCloud:/community/Debian_8.0/ /' state=present
 

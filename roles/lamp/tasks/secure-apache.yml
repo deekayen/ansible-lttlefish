@@ -1,16 +1,7 @@
 ---
 
-- name: Set ServerSignature to {{ apache_signature}}.
-  lineinfile: dest=/etc/apache2/conf-available/security.conf regexp="^ServerSignature " line="ServerSignature {{ apache_signature }}" state=present
+- name: Set apache2 ServerSignature.
+  lineinfile: dest=/etc/apache2/conf-available/security.conf regexp="^ServerSignature " line="ServerSignature Off" state=present
 
-- name: Set ServerTokens to {{ apache_tokens }}.
-  lineinfile: dest=/etc/apache2/conf-available/security.conf regexp="^ServerTokens " line="ServerTokens {{ apache_tokens }}" state=present
-
-- name: Specify SSLProtocol.
-  lineinfile: dest=/etc/apache2/sites-available/default-ssl.conf regexp="^SSLProtocol\s+" insertafter="^\t</VirtualHost>" line="SSLProtocol {{ apache_ssl_protocol}}" state=present
-
-- name: Specify SSLHonorCipherOrder.
-  lineinfile: dest=/etc/apache2/sites-available/default-ssl.conf regexp="^SSLHonorCipherOrder\s+" insertafter="^SSLProtocol" line="SSLHonorCipherOrder on" state=present
-
-- name: Specify SSLCipherSuite.
-  lineinfile: dest=/etc/apache2/sites-available/default-ssl.conf regexp="^SSLCipherSuite\s+" insertafter="^SSLHonorCipherOrder" line="SSLCipherSuite {{ apache_cipher_suite }}" state=present
+- name: Set apache2 ServerTokens.
+  lineinfile: dest=/etc/apache2/conf-available/security.conf regexp="^ServerTokens " line="ServerTokens Prod" state=present

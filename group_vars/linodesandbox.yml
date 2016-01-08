@@ -2,6 +2,8 @@
 ansible_ssh_user: root
 
 hostname: lttlesandbox
+# Default timezone: Etc/UTC
+timezone: America/New_York
 
 # Usable for Apache and misc server reports
 server_admin: david@example.com
@@ -11,11 +13,6 @@ apache_log_level: crit
 
 linode_dns_resolver1: 75.127.97.6
 linode_dns_resolver2: 75.127.97.7
-
-apache_signature: Off
-apache_tokens: Prod
-apache_ssl_protocol: -all +TLSv1.2
-apache_cipher_suite: HIGH:!CAMELLIA:!SEED:!aNULL:!eNULL:!EXPORT:!DH:!SSLv2:!DES:!RC4:!3DES:!MD5:!PSK:@STRENGTH
 
 owncloud_dbname: owncloud
 owncloud_dbuser: owncloud
