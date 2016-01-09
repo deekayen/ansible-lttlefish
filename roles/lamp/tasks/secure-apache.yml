@@ -1,7 +1,10 @@
 ---
 
-- name: Set apache2 ServerSignature.
+- name: Set ServerSignature.
   lineinfile: dest=/etc/apache2/conf-available/security.conf regexp="^ServerSignature " line="ServerSignature Off" state=present
 
-- name: Set apache2 ServerTokens.
+- name: Set ServerTokens.
   lineinfile: dest=/etc/apache2/conf-available/security.conf regexp="^ServerTokens " line="ServerTokens Prod" state=present
+
+- name: Disable deflate module to mitigate BREACH attack.
+  apache2_module: state=absent name=deflate
