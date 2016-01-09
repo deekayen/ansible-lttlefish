@@ -6,5 +6,12 @@
 - name: Set ServerTokens.
   lineinfile: dest=/etc/apache2/conf-available/security.conf regexp="^ServerTokens " line="ServerTokens Prod" state=present
 
+# Deflate is an "essential" module, requiring forced disable.
 - name: Disable deflate module to mitigate BREACH attack.
-  apache2_module: state=absent name=deflate
+  command: /usr/sbin/a2dismod -f deflate
+
+- name: Disable CGI module.
+  apache2_module: state=absent name=cgi
+
+- name: Enable SSL module.
+  apache2_module: state=present name=ssl

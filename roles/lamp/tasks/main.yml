@@ -12,12 +12,6 @@
     - apache2-utils
     - apachetop
 
-- name: Disable Apache CGI module.
-  apache2_module: state=absent name=cgi
-
-- name: Enable Apache SSL module.
-  apache2_module: state=present name=ssl
-
 - name: Enable Apache headers module.
   apache2_module: state=present name=headers
 
