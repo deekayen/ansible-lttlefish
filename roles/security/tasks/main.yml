@@ -17,3 +17,6 @@
 
 - name: Whitelist some addresses.
   template: src=hosts.allow.j2 dest=/etc/hosts.allow owner=root group=root mode=644
+
+- name: Upload sshd_config.
+  copy: src=sshd_config dest=/etc/ssh/sshd_config owner=root group=root mode=644
