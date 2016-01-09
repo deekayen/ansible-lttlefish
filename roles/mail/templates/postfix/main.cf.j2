@@ -28,17 +28,15 @@ smtpd_use_tls=yes
 #smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
 smtpd_tls_auth_only=yes
 smtpd_tls_security_level=may
-#smtpd_tls_exclude_ciphers = aNULL
-# I would like to dictate ciphers, but encryption is optional anyway
-#smtpd_tls_ciphers = medium
-smtpd_tls_exclude_ciphers = aNULL, eNULL, EXPORT, DES, RC4, MD5, PSK, aECDH, EDH-DSS-DES-CBC3-SHA, EDH-RSA-DES-CDC3-SHA, KRB5-DE5, CBC3-SHA
+smtpd_tls_ciphers = high
+smtpd_tls_exclude_ciphers = SEED, CAMELLIA, aNULL, eNULL, EXPORT, DES, RC4, MD5, PSK, aECDH, EDH-DSS-DES-CBC3-SHA, EDH-RSA-DES-CDC3-SHA, KRB5-DE5, CBC3-SHA, ECDHE-RSA-DES-CBC3-SHA, EDH-RSA-DES-CBC3-SHA, DES-CBC3-SHA
 #Seems like Vanguard might only support SSLv3
-smtpd_tls_protocols = !SSLv2
+smtpd_tls_protocols = !SSLv2, !SSLv3
 # mandatory is for when security level = encrypt instead of may
 #smtpd_tls_mandatory_ciphers = high
-#smtpd_tls_mandatory_exclude_ciphers = aNULL, MD5, RC2, RC4, DES
-#smtpd_tls_mandatory_protocols = !SSLv2
-#tls_preempt_cipherlist=yes
+#smtpd_tls_mandatory_exclude_ciphers = SEED, CAMELLIA, aNULL, eNULL, EXPORT, DES, RC4, MD5, PSK, aECDH, EDH-DSS-DES-CBC3-SHA, EDH-RSA-DES-CDC3-SHA, KRB5-DE5, CBC3-SHA, ECDHE-RSA-DES-CBC3-SHA, EDH-RSA-DES-CBC3-SHA, DES-CBC3-SHA
+#smtpd_tls_mandatory_protocols = !SSLv2, !SSLv3
+tls_preempt_cipherlist=yes
 smtpd_tls_dh1024_param_file = /etc/ssl/dh3072.pem
 
 # See /usr/share/doc/postfix/TLS_README.gz in the postfix-doc package for
