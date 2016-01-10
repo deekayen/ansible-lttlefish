@@ -5,9 +5,12 @@
 - name: Install NTP if needed.
   apt: name=ntp state=latest
 
+- name: Start NTP if needed.
+  service: name=ntp state=started
+
 - name: Set maximum tracked connections to 400000
   sysctl: name="net.netfilter.nf_conntrack_max" value=400000 sysctl_set=yes state=present reload=yes
 
 - name: Copy ntp.conf.
   copy: src=ntp.conf dest=/etc/ntp.conf owner=root group=root mode=644 backup=yes
-  notify: restart ntpd
+  notify: restart ntp
