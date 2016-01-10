@@ -73,6 +73,6 @@
 
 - include: secure-apache.yml
 - include: secure-mariadb.yml
-- include: lamp_scripts.yml
+- include: squirrelmail.yml
 - include: hosts.yml
 - include: owncloud.yml

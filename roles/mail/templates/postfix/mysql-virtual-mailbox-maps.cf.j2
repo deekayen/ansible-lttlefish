@@ -1,5 +1,5 @@
 user = {{ mailserver_dbuser }}
-password = {{ mailserver_dbpass }}
+password = {{ mailserver_dbpass.stdout }}
 hosts = 127.0.0.1
 dbname = {{ mailserver_dbname }}
 query = SELECT 1 FROM virtual_users WHERE email='%s'

@@ -16,15 +16,11 @@ linode_dns_resolver2: 75.127.97.7
 
 owncloud_dbname: owncloud
 owncloud_dbuser: owncloud
-owncloud_dbpass: changeme
 
 openvpn_tcp_port: 1194
 openvpn_udp_port: 1194
-
-mariadb_root_password: changeme
 
 # Dovecot max IMAP connections from one IP. default 10
 mail_max_userip_connections: 20
 mailserver_dbname: mailserver
 mailserver_dbuser: mailuser
-mailserver_dbpass: changeme
