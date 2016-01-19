@@ -20,3 +20,9 @@
 
 - name: Enable SSL module.
   apache2_module: state=present name=ssl
+
+- name: Omit IP addresses from apache2 logs.
+  apt: name=libapache2-mod-removeip state=latest
+
+- name: Enable removeip module.
+  apache2_module: state=present name=removeip
