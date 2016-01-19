@@ -54,6 +54,9 @@
     - libapache2-mod-php5
   notify: restart apache2
 
+- name: Increase default php5-apcu shm size.
+  lineinfile: dest=/etc/php5/apache2/conf.d/20-apcu.ini regexp="^apc.shm" line="apc.shm_size=128M" state=present
+
 - name: Install Python software properties
   apt: name=python-software-properties state=latest
 
