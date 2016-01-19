@@ -18,6 +18,9 @@
 - name: Copy Apache ServerName to prevent notices.
   template: src=httpd.conf.j2 dest=/etc/apache2/conf-available/httpd.conf
 
+- name: Copy Apache ports configuration.
+  template: src=ports.conf.j2 dest=/etc/apache2/ports.conf
+
 - stat: path=/etc/apache2/conf-enabled/httpd.conf
   register: apache_httpd_conf
 
