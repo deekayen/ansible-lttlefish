@@ -25,8 +25,9 @@
 /To[^A-Za-z0-9]get[^A-Za-z0-9]removed,?.*?go [to|here]?/i       REJECT Looks like spam (25).
 /\.\r?\n\.\r?\n\.\r?\n\.\r?\n\.\r?\n/m  REJECT Looks like spam (26).
 /\.[a-z]+\/l\/lc[A-Z0-9]{10,}\/[A-Z0-9]{12,}/   REJECT Looks like spam (27).
-/http:\/\/[a-z]+\.[a-z]{3,4}\/[A-Za-z0-9]{20}/  REJECT Looks like spam (28).
+/WesternUnion/  REJECT Looks like spam (28).
 /ship[ping|ment]+\/receiving/   REJECT Looks like re-mailer scam spam (29).
 /yandex/    REJECT I don't know any Russians (30).
 /Michael Kors/  REJECT I don't want your junk (31).
 /Medicare.?Open.?Enrollment/i   REJECT Looks like spam (32).
+/Shark Tank/  REJECT Looks like spam (33).
