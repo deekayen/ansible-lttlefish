@@ -2,6 +2,9 @@
 
 - hostname: name="{{ hostname }}"
 
+- name: Install Jessie backports repository.
+  apt_repository: repo='deb http://ftp.debian.org/debian jessie-backports main' state=present
+
 - name: Update packages
   apt: upgrade=safe update_cache=yes
   when: ansible_os_family == 'Debian'
@@ -10,6 +13,7 @@
   apt: "name={{ item }} state=latest"
   with_items:
     - bzip2
+    - certbot
     - curl
     - diffutils
     - dnsutils
@@ -29,6 +33,7 @@
     - openssh-sftp-server
     - p7zip
     - patch
+    - python-certbot-apache
     - rsync
     - screen
     - sed
@@ -55,3 +60,10 @@
 
 - name: Upload a new motd.
   copy: src=motd dest=/etc/motd owner=root group=root mode=644
+
+# https://stackoverflow.com/questions/28987891/patch-pyopenssl-for-sslv3-issue#29081240
+- name: Upgrade pip.
+  command: easy_install --upgrade pip
+
+- name: Upgrade python requests since Debian doesn't compile SSLv3 support.
+  command: pip install --upgrade requests
