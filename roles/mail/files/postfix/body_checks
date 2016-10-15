@@ -32,3 +32,4 @@
 /Medicare.?Open.?Enrollment/i   REJECT Looks like spam (32).
 /Shark Tank/  REJECT Looks like spam (33).
 /erect/ REJECT  Looks like spam (34).
+/Veterinar/     REJECT  I do not have pets (35).
