@@ -17,6 +17,7 @@
     - curl
     - diffutils
     - dnsutils
+    - etckeeper
     - findutils
     - git
     - git-core
