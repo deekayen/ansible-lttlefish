@@ -3,6 +3,12 @@
 - name: Install ownCloud repository.
   apt_repository: repo='deb http://download.opensuse.org/repositories/isv:/ownCloud:/community/Debian_8.0/ /' state=present
 
+# https://github.com/owncloud/core/issues/23599#issuecomment-250678273
+- name: "Add owncloud apt key."
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: 47AE7F72479BC94B
+
 - name: Add ownCloud repository key to the system.
   apt_key: url=http://download.opensuse.org/repositories/isv:ownCloud:community/Debian_8.0/Release.key state=present
 
