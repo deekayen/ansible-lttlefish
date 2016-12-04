@@ -1,7 +1,7 @@
 ---
 - name: Configure a lttle Debian-based Linode.
-  hosts: linodesandbox
-  user: root
+  hosts: localhost
+  become: yes
 
   roles:
     - system

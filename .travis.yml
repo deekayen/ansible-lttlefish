@@ -6,4 +6,4 @@ before_install:
   - sudo apt-add-repository ppa:ansible/ansible -y
   - sudo apt-get update -q
   - sudo apt-get install ansible -y
-script: ansible-playbook -v -i 127.0.0.1, lttle.yml
+script: ansible-playbook -v -i localhost, lttle.yml
