@@ -1,0 +1,9 @@
+language: python
+sudo: required
+dist: trusty
+before_install:
+  - sudo apt-get install software-properties-common
+  - sudo apt-add-repository ppa:ansible/ansible
+  - sudo apt-get update
+  - sudo apt-get install ansible
+script: ansible-playbook -v -i 127.0.0.1, lttle.yml

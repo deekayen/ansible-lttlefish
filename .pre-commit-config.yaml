@@ -1,5 +1,8 @@
-- repo: https://github.com/willthames/ansible-lint.git
-  sha: v3.3.3
+- repo: git://github.com/pre-commit/pre-commit-hooks
+  sha: adbb569fe9a64ad9bce3b53a77f1bc39ef31f682
   hooks:
-    - id: ansible-lint
-      files: \.(yaml|yml)$
+    - id: check-merge-conflict
+    - id: check-yaml
+    - id: detect-private-key
+    - id: end-of-file-fixer
+    - id: trailing-whitespace
