@@ -1,6 +1,6 @@
 ---
 - name: Configure a lttle Debian-based Linode.
-  hosts: localhost
+  hosts: all
   become: yes
 
   roles:
