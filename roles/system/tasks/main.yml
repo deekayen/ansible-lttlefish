@@ -41,7 +41,6 @@
     - openssh-sftp-server
     - p7zip
     - patch
-    - python-certbot-apache
     - rsync
     - screen
     - sed
@@ -61,8 +60,11 @@
 
 - name: Install certbot.
   apt:
-    name: certbot
+    name: "{{ item }}"
     state: latest
+  with_items:
+    - certbot
+    - python-certbot-apache
   when: ansible_distribution == "Debian"
 
 - name: Set timezone.
