@@ -106,6 +106,7 @@
     name: "{{ item }}"
     state: latest
   with_items:
+    - mysql-server-core-5.5
     - mysql-server-5.5
     - mysql-client-5.5
     - mysql-common
