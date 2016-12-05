@@ -13,5 +13,6 @@ before_install:
 before_script:
   - ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
   - cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-  - service ssh start
+  - sudo service ssh start
+  - sudo /etc/init.d/ssh start
 script: ansible-playbook -v -i localhost, lttle.yml
