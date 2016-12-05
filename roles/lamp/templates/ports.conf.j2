@@ -4,8 +4,6 @@ Listen {{ ansible_default_ipv4.address|default("0.0.0.0") }}:80
 Listen [{{ ansible_default_ipv6.address|default("::") }}]:80
 {% endif %}
 
-<VirtualHost {{ ansible_default_ipv4.address|default("0.0.0.0") }}:80>
-
 <IfModule mod_ssl.c>
     Listen {{ ansible_default_ipv4.address|default("0.0.0.0") }}:443
 {% if ansible_default_ipv6.address is defined %}
