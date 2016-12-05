@@ -86,12 +86,12 @@ alias_database = hash:/etc/aliases
 myorigin = /etc/mailname
 mydestination = localhost
 relayhost =
-mynetworks = 127.0.0.0/8 {{ ansible_default_ipv4.address }}/32 [::ffff:127.0.0.0]/104 [::1]/128 [{{ ansible_default_ipv6.address }}]/128
+mynetworks = 127.0.0.0/8 {{ ansible_default_ipv4.address|default("0.0.0.0") }}/32 [::ffff:127.0.0.0]/104 [::1]/128 [{{ ansible_default_ipv6.address|default("::") }}]/128
 mailbox_command = procmail -a "$EXTENSION"
 mailbox_size_limit = 0
 recipient_delimiter = +
 inet_protocols = all
-inet_interfaces = {{ ansible_default_ipv4.address }} [{{ ansible_default_ipv6.address }}]
+inet_interfaces = {{ ansible_default_ipv4.address|default("0.0.0.0") }} [{{ ansible_default_ipv6.address|default("::") }}]
 
 #Handing off local delivery to Dovecot's LMTP, and telling it where to store mail
 virtual_transport = lmtp:unix:private/dovecot-lmtp
