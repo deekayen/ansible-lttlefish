@@ -1,7 +1,16 @@
 ---
 
 - name: Copy opendkim configuration.
-  copy: src=opendkim/opendkim.conf dest=/etc/opendkim.conf owner=root group=root mode=644
+  copy:
+    src: opendkim/opendkim.conf
+    dest: /etc/opendkim.conf
+    owner: root
+    group: root
+    mode: 644
 
 - name: Make opendkim listen on loopback on port 12345.
-  lineinfile: dest=/etc/default/opendkim regexp="^SOCKET" line='SOCKET="inet:12345@localhost"' state=present
+  lineinfile:
+    dest: /etc/default/opendkim
+    regexp: "^SOCKET"
+    line: 'SOCKET="inet:12345@localhost"'
+    state: present

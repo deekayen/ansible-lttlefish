@@ -1,16 +1,23 @@
 ---
 
-- hostname: name="{{ hostname }}"
+- hostname:
+    name: "{{ hostname }}"
 
 - name: Install Jessie backports repository.
-  apt_repository: repo='deb http://ftp.debian.org/debian jessie-backports main' state=present
+  apt_repository:
+    repo: 'deb http://ftp.debian.org/debian jessie-backports main'
+    state: present
 
 - name: Update packages
-  apt: upgrade=safe update_cache=yes
+  apt:
+    upgrade: safe
+    update_cache: yes
   when: ansible_os_family == 'Debian'
 
 - name: Install system utilities.
-  apt: "name={{ item }} state=latest"
+  apt:
+    name: "{{ item }}"
+    state: latest
   with_items:
     - bzip2
     - certbot
@@ -52,7 +59,12 @@
     - zoo
 
 - name: Set timezone.
-  copy: content="{{ timezone }}\n" dest=/etc/timezone owner=root group=root mode=0644
+  copy:
+    content: "{{ timezone }}\n"
+    dest: /etc/timezone
+    owner: root
+    group: root
+    mode: 0644
   register: timechange
 
 - name: Reconfigure timezone data.
@@ -60,7 +72,12 @@
   when: timechange.changed and ansible_os_family == "Debian"
 
 - name: Upload a new motd.
-  copy: src=motd dest=/etc/motd owner=root group=root mode=644
+  copy:
+    src: motd
+    dest: /etc/motd
+    owner: root
+    group: root
+    mode: 644
 
 # https://stackoverflow.com/questions/28987891/patch-pyopenssl-for-sslv3-issue#29081240
 - name: Upgrade pip.

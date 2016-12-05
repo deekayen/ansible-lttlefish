@@ -1,13 +1,22 @@
 ---
 
 - name: Set ServerSignature.
-  lineinfile: dest=/etc/apache2/conf-available/security.conf regexp="^ServerSignature " line="ServerSignature Off" state=present
+  lineinfile:
+    dest: /etc/apache2/conf-available/security.conf
+    regexp: "^ServerSignature "
+    line: "ServerSignature Off"
+    state: present
 
 - name: Set ServerTokens.
-  lineinfile: dest=/etc/apache2/conf-available/security.conf regexp="^ServerTokens " line="ServerTokens Prod" state=present
+  lineinfile:
+    dest: /etc/apache2/conf-available/security.conf
+    regexp: "^ServerTokens "
+    line: "ServerTokens Prod"
+    state: present
 
 - name: Check for deflate module.
-  stat: path=/etc/apache2/mods-enabled/deflate.load
+  stat:
+    path: /etc/apache2/mods-enabled/deflate.load
   register: mod_deflate
 
 # Deflate is an "essential" module, requiring forced disable.
@@ -16,13 +25,21 @@
   when: mod_deflate.stat.exists == True
 
 - name: Disable CGI module.
-  apache2_module: state=absent name=cgi
+  apache2_module:
+    state: absent
+    name: cgi
 
 - name: Enable SSL module.
-  apache2_module: state=present name=ssl
+  apache2_module:
+    state: present
+    name: ssl
 
 - name: Omit IP addresses from apache2 logs.
-  apt: name=libapache2-mod-removeip state=latest
+  apt:
+    name: libapache2-mod-removeip
+    state: latest
 
 - name: Enable removeip module.
-  apache2_module: state=present name=removeip
+  apache2_module:
+    state: present
+    name: removeip

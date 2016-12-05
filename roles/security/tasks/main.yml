@@ -1,22 +1,46 @@
 ---
 - name: Update apt cache if needed.
-  apt: update_cache=yes cache_valid_time=3600
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
 
 # Wasn't supported in Jessie and doesn't support IPv6 anyway
 #- name: Install denyhosts.
 #  apt: name=denyhosts state=latest
 
 - name: Install unattended-upgrades.
-  apt: name=unattended-upgrades state=latest
+  apt:
+    name: unattended-upgrades
+    state: latest
 
 - name: Activate unattended-upgrades.
-  copy: src=20auto-upgrades dest=/etc/apt/apt.conf.d/20auto-upgrades owner=root group=root mode=644
+  copy:
+    src: 20auto-upgrades
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    owner: root
+    group: root
+    mode: 644
 
 - name: Ignore pings.
-  sysctl: name="net.ipv4.icmp_echo_ignore_all" value=1 sysctl_set=yes state=present reload=yes
+  sysctl:
+    name: "net.ipv4.icmp_echo_ignore_all"
+    value: 1
+    sysctl_set: yes
+    state: present
+    reload: yes
 
 - name: Whitelist some addresses.
-  template: src=hosts.allow.j2 dest=/etc/hosts.allow owner=root group=root mode=644
+  template:
+    src: hosts.allow.j2
+    dest: /etc/hosts.allow
+    owner: root
+    group: root
+    mode: 644
 
 - name: Upload sshd_config.
-  copy: src=sshd_config dest=/etc/ssh/sshd_config owner=root group=root mode=644
+  copy:
+    src: sshd_config
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: 644

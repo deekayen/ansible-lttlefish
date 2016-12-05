@@ -1,10 +1,14 @@
 ---
 
 - name: Update apt cache if needed.
-  apt: update_cache=yes cache_valid_time=3600
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
 
 - name: "Install Apache"
-  apt: "name={{ item }} state=latest"
+  apt:
+    name: "{{ item }}"
+    state: latest
   with_items:
     - apache2
     - apache2-bin
@@ -13,15 +17,22 @@
     - apachetop
 
 - name: Enable Apache headers module.
-  apache2_module: state=present name=headers
+  apache2_module:
+    state: present
+    name: headers
 
 - name: Copy Apache ServerName to prevent notices.
-  template: src=httpd.conf.j2 dest=/etc/apache2/conf-available/httpd.conf
+  template:
+    src: httpd.conf.j2
+    dest: /etc/apache2/conf-available/httpd.conf
 
 - name: Copy Apache ports configuration.
-  template: src=ports.conf.j2 dest=/etc/apache2/ports.conf
+  template:
+    src: ports.conf.j2
+    dest: /etc/apache2/ports.conf
 
-- stat: path=/etc/apache2/conf-enabled/httpd.conf
+- stat:
+    path: /etc/apache2/conf-enabled/httpd.conf
   register: apache_httpd_conf
 
 - name: Enable Apache httpd configuration file.
@@ -29,7 +40,9 @@
   when: apache_httpd_conf.stat.islnk is not defined
 
 - name: "Install PHP"
-  apt: "name={{ item }} state=latest"
+  apt:
+    name: "{{ item }}"
+    state: latest
   with_items:
     - php-pear
     - php-xml-parser
@@ -55,21 +68,31 @@
   notify: restart apache2
 
 - name: Increase default php5-apcu shm size.
-  lineinfile: dest=/etc/php5/apache2/conf.d/20-apcu.ini regexp="^apc.shm" line="apc.shm_size=128M" state=present
+  lineinfile:
+    dest: /etc/php5/apache2/conf.d/20-apcu.ini
+    regexp: "^apc.shm"
+    line: "apc.shm_size=128M"
+    state: present
 
 - name: Install Python software properties
-  apt: name=python-software-properties state=latest
+  apt:
+    name: python-software-properties
+    state: latest
 
 - name: Check if MariaDB is already installed.
-  stat: path=/etc/init.d/mysql
+  stat:
+    path: /etc/init.d/mysql
   register: mariadb_installed
 
 - name: Update apt cache if MariaDB is not yet installed.
-  apt: update_cache=yes
+  apt:
+    update_cache: yes
   when: mariadb_installed.stat.exists == false
 
 - name: Install MariaDB Server
-  apt: name={{ item }} state=latest
+  apt:
+    name: "{{ item }}"
+    state: latest
   with_items:
     - mariadb-server
     - mariadb-client

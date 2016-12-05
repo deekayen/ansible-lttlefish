@@ -1,11 +1,14 @@
 ---
 
 - name: Check for existing root database credentials.
-  stat: path={{ ansible_user_dir }}/.my.cnf
+  stat:
+    path: "{{ ansible_user_dir }}/.my.cnf"
   register: my_cnf
 
 - name: Install random password generator.
-  apt: name=pwgen state=present
+  apt:
+    name: pwgen
+    state: present
   when: my_cnf.stat.exists == False
 
 - name: Generate a random database root password.
@@ -48,4 +51,6 @@
   with_items: mariadb_anonymous_hosts.stdout_lines
 
 - name: Remove MariaDB test database.
-  mysql_db: name="test" state="absent"
+  mysql_db:
+    name: test
+    state: absent

@@ -1,7 +1,9 @@
 ---
 
 - name: Install ownCloud repository.
-  apt_repository: repo='deb http://download.opensuse.org/repositories/isv:/ownCloud:/community/Debian_8.0/ /' state=present
+  apt_repository:
+    repo: 'deb http://download.opensuse.org/repositories/isv:/ownCloud:/community/Debian_8.0/ /'
+    state: present
 
 # https://github.com/owncloud/core/issues/23599#issuecomment-250678273
 - name: "Add owncloud apt key."
@@ -10,13 +12,18 @@
     id: 47AE7F72479BC94B
 
 - name: Add ownCloud repository key to the system.
-  apt_key: url=http://download.opensuse.org/repositories/isv:ownCloud:community/Debian_8.0/Release.key state=present
+  apt_key:
+    url: http://download.opensuse.org/repositories/isv:ownCloud:community/Debian_8.0/Release.key
+    state: present
 
 - name: Update apt cache to add ownCloud repo key.
-  apt: update_cache=yes
+  apt:
+    update_cache: yes
 
 - name: Install ownCloud.
-  apt: "name={{ item }} state=latest"
+  apt:
+    name: "{{ item }}"
+    state: latest
   with_items:
     - owncloud
     - owncloud-3rdparty
@@ -47,11 +54,14 @@
   register: owncloud_install_packages
 
 - name: Check for existing ownCloud install.
-  stat: path=/var/www/owncloud/config/config.php
+  stat:
+    path: /var/www/owncloud/config/config.php
   register: owncloud_conf
 
 - name: Install random password generator.
-  apt: name=pwgen state=present
+  apt:
+    name: pwgen
+    state: present
   when: owncloud_conf.stat.exists == False
 
 - name: Generate a random ownCloud database password.
@@ -61,16 +71,24 @@
   when: owncloud_conf.stat.exists == False
 
 - name: Create a database for ownCloud.
-  mysql_db: name={{ owncloud_dbname }} state=present
+  mysql_db:
+    name: "{{ owncloud_dbname }}"
+    state: present
   when: owncloud_install_packages.changed == True
 
 - name: Create a database user for ownCloud.
-  mysql_user: name="{{ owncloud_dbuser }}"
-            password="{{ owncloud_dbpass.stdout }}"
-            priv="owncloud.*:ALL"
-            state=present
+  mysql_user:
+    name: "{{ owncloud_dbuser }}"
+    password: "{{ owncloud_dbpass.stdout }}"
+    priv: "owncloud.*:ALL"
+    state: present
   when: mariadb_install_packages.changed == True and owncloud_conf.stat.exists == False and owncloud_dbpass.changed == True
 
 - name: Copy ownCloud config template.
-  template: src=owncloud_config.php.j2 dest=/var/www/owncloud/config/config.php owner=www-data group=www-data mode=770
+  template:
+    src: owncloud_config.php.j2
+    dest: /var/www/owncloud/config/config.php
+    owner: www-data
+    group: www-data
+    mode: 770
   when: owncloud_conf.stat.exists == False

@@ -1,9 +1,14 @@
 ---
 - name: Update apt cache if needed.
-  apt: update_cache=yes cache_valid_time=3600
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
 
 - name: Remove exim.
-  apt: name={{ item }} state=absent purge=yes
+  apt:
+    name: "{{ item }}"
+    state: absent
+    purge: yes
   with_items:
     - exim4
     - exim4-base
@@ -11,7 +16,9 @@
     - exim4-daemon-light
 
 - name: Install Dovecot.
-  apt: name={{ item }} state=latest
+  apt:
+    name: "{{ item }}"
+    state: latest
   with_items:
     - dovecot-core
     - dovecot-imapd
@@ -20,46 +27,64 @@
     - dovecot-pop3d
 
 - name: Install Postfix.
-  apt: name={{ item }} state=latest
+  apt:
+    name: "{{ item }}"
+    state: latest
   with_items:
     - postfix
     - postfix-mysql
     - postfix-policyd-spf-python
 
 - name: Install ClamAV.
-  apt: name={{ item }} state=latest
+  apt:
+    name: "{{ item }}"
+    state: latest
   with_items:
     - clamav
     - clamav-base
     - clamav-freshclam
 
 - name: Install OpenDKIM.
-  apt: name={{ item }} state=latest
+  apt:
+    name: "{{ item }}"
+    state: latest
   with_items:
     - opendkim
     - opendkim-tools
 
 - name: Install procmail.
-  apt: name=procmail state=latest
+  apt:
+    name: procmail
+    state: latest
 
 - name: Copy mailserver table SQL.
-  copy: src=mailserver.sql dest=/tmp/mailserver.sql
+  copy:
+    src: mailserver.sql
+    dest: /tmp/mailserver.sql
 
 - name: Create a database for mail configuration.
-  mysql_db: name={{ mailserver_dbname }} state=present
+  mysql_db:
+    name: "{{ mailserver_dbname }}"
+    state: present
   register: mailserver_db_created
 
 - name: Import mailserver database tables.
   # The import SQL file should have IF EXISTS on each CREATE.
-  mysql_db: name={{ mailserver_dbname }} state=import target=/tmp/mailserver.sql
+  mysql_db:
+    name: "{{ mailserver_dbname }}"
+    state: import
+    target: /tmp/mailserver.sql
   when: mailserver_db_created.changed == true
 
 - name: Check for existing mail database user.
-  stat: path=/etc/dovecot/dovecot-sql.conf.ext
+  stat:
+    path: /etc/dovecot/dovecot-sql.conf.ext
   register: dovecot_sql
 
 - name: Install random password generator.
-  apt: name=pwgen state=present
+  apt:
+    name: pwgen
+    state: present
   when: dovecot_sql.stat.exists == False
 
 - name: Generate a random database root password.
@@ -69,14 +94,21 @@
   when: dovecot_sql.stat.exists == False
 
 - name: Create a database user for mail.
-  mysql_user: name={{ mailserver_dbuser }}
-            password={{ mailserver_dbpass.stdout }}
-            priv="{{ mailserver_dbname }}.*:SELECT"
-            state=present
+  mysql_user:
+    name: "{{ mailserver_dbuser }}"
+    password: "{{ mailserver_dbpass.stdout }}"
+    priv: "{{ mailserver_dbname }}.*:SELECT"
+    state: present
   when: dovecot_sql.stat.exists == False and mailserver_dbpass.changed == True
 
 - name: Copy Dovecot configuration files.
-  copy: src={{item.src}} dest={{item.dest}} owner=root group=root mode=644 backup=yes
+  copy:
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+    owner: root
+    group: root
+    mode: 644
+    backup: yes
   with_items:
     - { src: 'dovecot/10-auth.conf', dest: '/etc/dovecot/conf.d/10-auth.conf' }
     - { src: 'dovecot/10-mail.conf', dest: '/etc/dovecot/conf.d/10-mail.conf' }
@@ -86,33 +118,69 @@
     - { src: 'dovecot/auth-sql.conf.ext', dest: '/etc/dovecot/conf.d/auth-sql.conf.ext' }
 
 - name: Copy Dovecot configuration templates.
-  template: src={{item.src}} dest={{item.dest}} owner=root group=root mode=644 backup=yes
+  template:
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+    owner: root
+    group: root
+    mode: 644
+    backup: yes
   with_items:
     - { src: 'dovecot/15-lda.conf.j2', dest: '/etc/dovecot/conf.d/15-lda.conf' }
     - { src: 'dovecot/dovecot.conf.j2', dest: '/etc/dovecot/dovecot.conf' }
 
 - name: Copy Dovecot SQL connection template.
-  template: src=dovecot/dovecot-sql.conf.ext.j2 dest=/etc/dovecot/dovecot-sql.conf.ext owner=root group=root mode=644
+  template:
+    src: dovecot/dovecot-sql.conf.ext.j2
+    dest: /etc/dovecot/dovecot-sql.conf.ext
+    owner: root
+    group: root
+    mode: 644
   when: dovecot_sql.stat.exists == False
 
 - name: Copy postfix regular expression checks.
-  copy: src={{item.src}} dest={{item.dest}} owner=root group=root mode=644
+  copy:
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+    owner: root
+    group: root
+    mode: 644
   with_items:
     - { src: 'postfix/header_checks', dest: '/etc/postfix/header_checks' }
     - { src: 'postfix/body_checks', dest: '/etc/postfix/body_checks' }
     - { src: 'postfix/helo_restrictions', dest: '/etc/postfix/helo_restrictions' }
 
 - name: Copy postfix main configuration.
-  template: src=postfix/main.cf.j2 dest=/etc/postfix/main.cf owner=root group=root mode=644
+  template:
+    src: postfix/main.cf.j2
+    dest: /etc/postfix/main.cf
+    owner: root
+    group: root
+    mode: 644
 
 - name: Copy postfix master configuration.
-  copy: src=postfix/master.cf dest=/etc/postfix/master.cf owner=root group=root mode=644
+  copy:
+    src: postfix/master.cf
+    dest: /etc/postfix/master.cf
+    owner: root
+    group: root
+    mode: 644
 
 - name: Copy mailname.
-  template: src=postfix/mailname.j2 dest=/etc/mailname owner=root group=root mode=644
+  template:
+    src: postfix/mailname.j2
+    dest: /etc/mailname
+    owner: root
+    group: root
+    mode: 644
 
 - name: Copy postfix virtual mailbox mapping.
-  template: src={{item.src}} dest={{item.dest}} owner=root group=root mode=644
+  template:
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+    owner: root
+    group: root
+    mode: 644
   with_items:
     - { src: 'postfix/mysql-virtual-alias-maps.cf.j2', dest: '/etc/postfix/mysql-virtual-alias-maps.cf' }
     - { src: 'postfix/mysql-virtual-mailbox-domains.cf.j2', dest: '/etc/postfix/mysql-virtual-mailbox-domains.cf' }
@@ -120,6 +188,10 @@
   when: dovecot_sql.stat.exists == False
 
 - name: Whitelist policyd IPs from No-IP backup SMTP.
-  lineinfile: dest=/etc/postfix-policyd-spf-python/policyd-spf.conf regexp="^skip_addresses " line="skip_addresses = 127.0.0.0/8,::ffff:127.0.0.0/104,::1,8.23.224.50,69.65.5.119,69.65.5.110" state=present
+  lineinfile:
+    dest: /etc/postfix-policyd-spf-python/policyd-spf.conf
+    regexp: "^skip_addresses "
+    line: "skip_addresses = 127.0.0.0/8,::ffff:127.0.0.0/104,::1,8.23.224.50,69.65.5.119,69.65.5.110"
+    state: present
 
 - include: opendkim.yml
