@@ -1,4 +1,8 @@
+{% if ansible_default_ipv6.address is defined %}
 <VirtualHost {{ ansible_default_ipv4.address|default("0.0.0.0") }}:80 [{{ ansible_default_ipv6.address|default("::") }}]:80>
+{% else %}
+<VirtualHost {{ ansible_default_ipv4.address|default("0.0.0.0") }}:80>
+{% endif %}
    ServerName pool.ntp.org
    ServerAlias *.pool.ntp.org *.ntppool.org
    Redirect permanent / http://www.pool.ntp.org/
