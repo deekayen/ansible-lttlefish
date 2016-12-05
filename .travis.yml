@@ -9,6 +9,8 @@ addons:
   ssh_known_hosts:
     - localhost
     - 127.0.0.1
+services:
+  - ssh
 before_install:
   - sudo apt-add-repository ppa:ansible/ansible -y
   - sudo apt-get update -qq
