@@ -16,4 +16,4 @@ before_install:
 before_script:
   - ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
   - cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-script: ansible-playbook -v -i localhost, lttle.yml
+script: ansible-playbook -v -i localhost, -c local lttle.yml
