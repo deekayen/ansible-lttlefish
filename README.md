@@ -1,6 +1,6 @@
 # lttle-ansible-bootstrap
 
-[![Build Status](https://travis-ci.org/deekayen/lttle-ansible-bootstrap.svg?branch=master)](https://travis-ci.org/deekayen/lttle-ansible-bootstrap) ![Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)
+![Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)
 
 I don't really intend for this repo to be consumed as a generic, re-usable
 configuration. It's strictly intended to meet my personal needs.
