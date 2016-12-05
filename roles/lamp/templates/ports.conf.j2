@@ -1,13 +1,13 @@
 Listen 127.0.0.1:80
 Listen {{ ansible_default_ipv4.address|default("0.0.0.0") }}:80
-Listen [{{ ansible_default_ipv6.address|default("::1") }}]:80
+Listen [{{ ansible_default_ipv6.address|default("::") }}]:80
 
 <IfModule mod_ssl.c>
     Listen {{ ansible_default_ipv4.address|default("0.0.0.0") }}:443
-    Listen [{{ ansible_default_ipv6.address|default("::1") }}]:443
+    Listen [{{ ansible_default_ipv6.address|default("::") }}]:443
 </IfModule>
 
 <IfModule mod_gnutls.c>
     Listen {{ ansible_default_ipv4.address|default("0.0.0.0") }}:443
-    Listen [{{ ansible_default_ipv6.address|default("::1") }}]:443
+    Listen [{{ ansible_default_ipv6.address|default("::") }}]:443
 </IfModule>

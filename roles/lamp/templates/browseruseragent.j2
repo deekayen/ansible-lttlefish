@@ -1,4 +1,4 @@
-<VirtualHost {{ ansible_default_ipv4.address|default("0.0.0.0") }}:80 [{{ ansible_default_ipv6.address|default("::1") }}]:80>
+<VirtualHost {{ ansible_default_ipv4.address|default("0.0.0.0") }}:80 [{{ ansible_default_ipv6.address|default("::") }}]:80>
   ServerName browseruseragent.info
   ServerAlias *.browseruseragent.info
   ServerAdmin {{ server_admin }}
