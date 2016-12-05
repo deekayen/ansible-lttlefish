@@ -5,7 +5,7 @@
     update_cache: yes
     cache_valid_time: 3600
 
-- name: "Install Apache"
+- name: "Install Apache."
   apt:
     name: "{{ item }}"
     state: latest
@@ -39,7 +39,7 @@
   command: /usr/sbin/a2enconf httpd
   when: apache_httpd_conf.stat.islnk is not defined
 
-- name: "Install PHP"
+- name: "Install PHP."
   apt:
     name: "{{ item }}"
     state: latest
@@ -74,7 +74,7 @@
     line: "apc.shm_size=128M"
     state: present
 
-- name: Install Python software properties
+- name: Install Python software properties.
   apt:
     name: python-software-properties
     state: latest
@@ -89,7 +89,7 @@
     update_cache: yes
   when: mariadb_installed.stat.exists == false
 
-- name: Install MariaDB Server
+- name: Install MariaDB Server.
   apt:
     name: "{{ item }}"
     state: latest
@@ -99,6 +99,19 @@
     - mariadb-common
     - python-mysqldb
   register: mariadb_install_packages
+  when: ansible_distribution == "Debian"
+
+- name: Install MySQL Server.
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - mysql-server
+    - mysql-client
+    - mysql-common
+    - python-mysqldb
+  register: mariadb_install_packages
+  when: ansible_distribution == "Ubuntu"
 
 - include: secure-apache.yml
 - include: secure-mariadb.yml
