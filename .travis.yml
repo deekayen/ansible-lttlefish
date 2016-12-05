@@ -1,9 +1,17 @@
 language: python
 sudo: required
 dist: trusty
+addons:
+  ssh_known_hosts:
+    - localhost
+    - 127.0.0.1
 before_install:
-  - sudo apt-get install software-properties-common -y
+  - sudo apt-get install -qq software-properties-common -y
   - sudo apt-add-repository ppa:ansible/ansible -y
-  - sudo apt-get update -q
-  - sudo apt-get install ansible -y
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq ansible openssh-server -y
+before_script:
+  - ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+  - cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+  - service ssh start
 script: ansible-playbook -v -i localhost, lttle.yml
