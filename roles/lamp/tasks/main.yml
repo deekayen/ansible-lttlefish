@@ -106,12 +106,12 @@
     name: "{{ item }}"
     state: latest
   with_items:
-    - mysql-server
-    - mysql-client
+    - mysql-server-5.5
+    - mysql-client-5.5
     - mysql-common
     - python-mysqldb
   register: mariadb_install_packages
-  when: ansible_distribution == "Ubuntu"
+  when: ansible_distribution == "Ubuntu" and ansible_distribution_release == "trusty"
 
 - include: secure-apache.yml
 - include: secure-mariadb.yml
