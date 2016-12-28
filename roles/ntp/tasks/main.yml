@@ -14,13 +14,19 @@
     name: ntp
     state: started
 
-- name: Set maximum tracked connections to 400000
+- name: Set maximum tracked connections to 786432.
   sysctl:
     name: "net.netfilter.nf_conntrack_max"
-    value: 400000
+    value: 786432
     sysctl_set: yes
     state: present
     reload: yes
+
+# Size is nf_conntrack_max / 4
+- name: "Increase nf_conntrack hash table."
+  lineinfile:
+    dest: /etc/rc.local
+    line: echo 196608 > /sys/module/nf_conntrack/parameters/hashsize
 
 - name: Copy ntp.conf.
   copy:
