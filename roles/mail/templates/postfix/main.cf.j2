@@ -61,6 +61,8 @@ smtpd_recipient_restrictions =
   permit_sasl_authenticated,
   permit_mynetworks,
   reject_unauth_destination,
+# throws lookup errors, causing 450 service unavailable mail
+#  permit_dnswl_client list.dnswl.org=127.0.[0..255].3,
   permit_dnswl_client swl.spamhaus.org,
   permit_dnswl_client accredit.habeas.com,
   permit_dnswl_client wl.mailspike.net=127.0.0.20,
@@ -68,12 +70,33 @@ smtpd_recipient_restrictions =
   permit_rhswl_client hostkarma.junkemailfilter.com=127.0.0.1,
   permit_dnswl_client hostkarma.junkemailfilter.com=127.0.0.1,
   permit_dnswl_client ips.whitelisted.org=127.0.0.2,
+# Lookup failures
+#  permit_dnswl_client whitelist.surriel.com,
+# DNS lookup failure seen in mail.log
+#  permit_dnswl_client iadb.isipp.com=127.0.1.255,
+# blocked Bruce Schneier mailing list
+#  reject_rbl_client bl.spamcop.net,
   reject_rbl_client zen.spamhaus.org,
   reject_rbl_client truncate.gbudb.net,
   reject_rbl_client psbl.surriel.com,
   reject_rbl_client bl.mailspike.net=127.0.0.[10..11],
+# blocks Mandrillapp remailer
+#  reject_rbl_client bl.nosolicitado.org,
+# blocks Comcast business
+#  reject_rbl_client dnsbl.justspam.org,
+#  reject_rbl_client dnsbl-1.uceprotect.net,
   reject_rbl_client hostkarma.junkemailfilter.com=127.0.0.2,
-  reject_rbl_client dnsbl.sorbs.net=127.0.0.[2..6],
+# This previously went 2..6, but I had to remove 6
+# after pairlite www7.pairlite.com got listed.
+# and Yahoo forwards were blocked.
+  reject_rbl_client dnsbl.sorbs.net=127.0.0.[2..5],
+# blocks yahoo mail
+#  reject_rbl_client ubl.unsubscore.com,
+#  reject_rbl_client all.spamrats.com,
+# included in spamhaus xbl and zen
+#  reject_rbl_client cbl.abuseat.org,
+# blocked pairlite
+#  reject_rbl_client b.barracudacentral.org,
   check_policy_service unix:private/policy-spf
 
 smtpd_sender_restrictions =
