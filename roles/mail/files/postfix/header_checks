@@ -24,3 +24,5 @@
 /G700/          REJECT  That is an odd spam topic (21).
 /HR manager/  REJECT  Looks like spam (22).
 /erect/ REJECT  Looks like spam (23).
+/mail-[0-9]+-[0-9]+\.rm000[0-9]\.net/    REJECT  Your network sends too much spam (24).
+/auth[0-9]+\.rm000[0-9]\.net/   REJECT Your network sends too much spam (25).
