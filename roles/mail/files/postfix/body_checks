@@ -33,4 +33,13 @@
 /Shark Tank/  REJECT Looks like spam (33).
 /erect/ REJECT  Looks like spam (34).
 /Veterinar/     REJECT  I do not have pets (35).
-/GNC/ REJECT  I do not shop at GNC (36).
+/Vacanc[ies|y]/ REJECT  Looks like fake job spam (36).
+/CBIZ/    REJECT  Looks like fake job spam (37).
+/[P|p]ussy/   REJECT  Watch your mouth (38).
+/skin tags/ REJECT  Looks like spam (39).
+/HGTV/    REJECT  I do not have cable (40).
+/codelobster/ REJECT  I will not write a free review (41).
+/[C|c]ostco/  REJECT  I am not a costco member (42).
+/[F|f][U|u][C|c][K|k]/  REJECT  Watch your mouth (43).
+/[L|l]ogo [T|t]emplate/ REJECT  No thanks (44).
+/[L|l]ogo [D|d]esign/ REJECT  No thanks (45).
