@@ -20,6 +20,7 @@
     name: "{{ item }}"
     state: latest
   with_items:
+    - apt-transport-https
     - bzip2
     - curl
     - diffutils
