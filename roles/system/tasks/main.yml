@@ -9,12 +9,6 @@
     state: present
   when: ansible_distribution == "Debian"
 
-- name: Update packages
-  apt:
-    upgrade: safe
-    update_cache: yes
-  when: ansible_os_family == 'Debian'
-
 - name: Install system utilities.
   apt:
     name: "{{ item }}"
