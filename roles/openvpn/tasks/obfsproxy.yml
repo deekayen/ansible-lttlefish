@@ -19,3 +19,7 @@
     update_cache: yes
   with_items:
     - obfsproxy
+
+# Add to /etc/rc.local
+- debug:
+    msg: "obfsproxy obfs3 --dest=vpn.deekayen.net:443 server 0.0.0.0:80 &"
