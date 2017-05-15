@@ -18,7 +18,7 @@ before_install:
 before_script:
   - ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
   - cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-script: ansible-playbook -i localhost, -c local lttle.yml
+script: ansible-playbook --check --diff -i localhost, -c local lttle.yml
 after_failure:
   - echo "Failures detected. Outputing additional logs:"
   - sudo cat /var/log/apache2/error.log
