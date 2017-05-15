@@ -1,8 +1,4 @@
 ---
-- name: Update apt cache if needed.
-  apt:
-    update_cache: yes
-    cache_valid_time: 3600
 
 - name: Ensure cron is installed.
   apt:
@@ -44,3 +40,6 @@
   template:
     src: udp.j2
     dest: /etc/openvpn/udp.conf
+
+- include: obfsproxy.yml
+  when: ansible_distribution == "Debian"

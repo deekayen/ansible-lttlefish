@@ -29,7 +29,6 @@
     - lynx
     - nano
     - nmap
-    - obfsproxy
     - openssl
     - openssh-client
     - openssh-server
