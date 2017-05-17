@@ -84,7 +84,7 @@ key server.key  # This file should be kept secret
 #   openssl dhparam -out dh1024.pem 1024
 # Substitute 2048 for 1024 if you are using
 # 2048 bit keys.
-dh dh2048.pem
+dh dh4096.pem
 
 # Configure server mode and supply a VPN subnet
 # for OpenVPN to draw client addresses from.
@@ -192,13 +192,10 @@ push "redirect-gateway def1 bypass-dhcp"
 # http://openvpn.net/faq.html#dhcpcaveats
 # The addresses below refer to the public
 # DNS servers provided by opendns.com.
-push "dhcp-option DNS 10.9.0.1"
+push "dhcp-option DNS 172.29.0.1"
 push "dhcp-option DNS {{ linode_dns_resolver1 }}"
 push "dhcp-option DNS {{ linode_dns_resolver2 }}"
 push "dhcp-option DNS 8.8.8.8"
-push "dhcp-option DNS 8.8.4.4"
-push "dhcp-option DNS 208.67.222.222"
-push "dhcp-option DNS 208.67.220.220"
 
 # Uncomment this directive to allow different
 # clients to be able to "see" each other.
@@ -225,10 +222,10 @@ client-to-client
 # messages to be sent back and forth over
 # the link so that each side knows when
 # the other side has gone down.
-# Ping every 15 seconds, assume that remote
+# Ping every 10 seconds, assume that remote
 # peer is down if no ping received during
 # a 120 second time period.
-keepalive 15 120
+keepalive 10 120
 
 # For extra security beyond that provided
 # by SSL/TLS, create an "HMAC firewall"
@@ -246,15 +243,18 @@ tls-auth ta.key 0 # This file is secret
 # Select a cryptographic cipher.
 # This config item must be copied to
 # the client config file as well.
-cipher BF-CBC        # Blowfish (default)
+;cipher BF-CBC        # Blowfish (default)
 ;cipher AES-128-CBC   # AES
 ;cipher DES-EDE3-CBC  # Triple-DES
 ;cipher RC2-40-CBC
+cipher AES-256-CBC
+tls-cipher TLS-DHE-RSA-WITH-AES-256-GCM-SHA384:TLS-DHE-RSA-WITH-AES-128-GCM-SHA256:TLS-DHE-RSA-WITH-AES-256-CBC-SHA:TLS-DHE-RSA-WITH-CAMELLIA-256-CBC-SHA:TLS-DHE-RSA-WITH-AES-128-CBC-SHA:TLS-DHE-RSA-WITH-CAMELLIA-128-CBC-SHA
+auth SHA512
 
 # Enable compression on the VPN link.
 # If you enable it here, you must also
 # enable it in the client config file.
-comp-lzo
+comp-lzo no
 
 # The maximum number of concurrently connected
 # clients we want to allow.
