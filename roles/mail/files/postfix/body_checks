@@ -10,7 +10,6 @@
 /\borgasms\b/     REJECT  You can keep your spam (10).
 /\bzyrtec\b/      REJECT  You can keep your spam (11).
 /Nizza/         REJECT Looks like spam (12).
-/c5b1fcb6e382006f41ea1c84a48fd3ab/ REJECT  Looks like spam (13).
 /59aab0b241fe6ffd9a1f62ec1461718c/ REJECT Looks like spam (14).
 /NOOxKaOiFNOOxKaOi0iOV/ REJECT Looks like spam (15).
 /unsub\.do\?e=deekayen@deekayen\.net&m=/ REJECT Looks like spam (16).
