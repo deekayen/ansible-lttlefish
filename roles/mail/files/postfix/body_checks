@@ -35,7 +35,6 @@
 /Vacanc[ies|y]/ REJECT  Looks like fake job spam (36).
 /[P|p]ussy/   REJECT  Watch your mouth (38).
 /skin tags/ REJECT  Looks like spam (39).
-/HGTV/    REJECT  I do not have cable (40).
 /codelobster/ REJECT  I will not write a free review (41).
 /[C|c]ostco/  REJECT  I am not a costco member (42).
 /[F|f][U|u][C|c][K|k]/  REJECT  Watch your mouth (43).
