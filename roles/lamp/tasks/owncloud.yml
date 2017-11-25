@@ -2,7 +2,7 @@
 
 - name: Install ownCloud repository.
   apt_repository:
-    repo: 'deb http://download.opensuse.org/repositories/isv:/ownCloud:/community/Debian_8.0/ /'
+    repo: 'deb https://download.owncloud.org/download/repositories/10.0/Debian_8.0/ /'
     state: present
 
 # https://github.com/owncloud/core/issues/23599#issuecomment-250678273
@@ -13,7 +13,7 @@
 
 - name: Add ownCloud repository key to the system.
   apt_key:
-    url: http://download.opensuse.org/repositories/isv:ownCloud:community/Debian_8.0/Release.key
+    url: https://download.owncloud.org/download/repositories/10.0/Debian_8.0/Release.key
     state: present
 
 - name: Update apt cache to add ownCloud repo key.
@@ -26,27 +26,8 @@
     state: latest
   with_items:
     - owncloud
-    - owncloud-app-activity
-    - owncloud-app-encryption
-    - owncloud-app-external
-    - owncloud-app-files
-    - owncloud-app-files-external
-    - owncloud-app-files-locking
-    - owncloud-app-files-pdfviewer
-    - owncloud-app-files-sharing
-    - owncloud-app-files-texteditor
-    - owncloud-app-files-trashbin
-    - owncloud-app-files-versions
-    - owncloud-app-files-videoviewer
-    - owncloud-app-firstrunwizard
-    - owncloud-app-gallery
-    - owncloud-app-provisioning-api
-    - owncloud-app-templateeditor
-    - owncloud-app-user-external
-    - owncloud-app-user-ldap
-    - owncloud-app-user-webdavauth
-    - owncloud-config-apache
-    - owncloud-server
+    - owncloud-deps-php7.0
+    - owncloud-files
     - libreoffice-writer
     - clamav
     - clamav-daemon
