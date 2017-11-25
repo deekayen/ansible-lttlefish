@@ -1,5 +1,15 @@
 ---
 
+- name: Install apt HTTPS support.
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - python-openssl
+    - python-pip
+    - python-pyasn1
+    - python-urllib3
+
 - name: Install ownCloud repository.
   apt_repository:
     repo: 'deb https://download.owncloud.org/download/repositories/10.0/Debian_8.0/ /'
