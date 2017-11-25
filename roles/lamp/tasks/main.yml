@@ -117,6 +117,5 @@
 
 - include: secure-apache.yml
 - include: secure-mariadb.yml
-- include: squirrelmail.yml
 - include: hosts.yml
 - include: owncloud.yml
