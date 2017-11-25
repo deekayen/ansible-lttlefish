@@ -1,18 +1,8 @@
 ---
 
-- name: Install apt HTTPS support.
-  apt:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - python-openssl
-    - python-pip
-    - python-pyasn1
-    - python-urllib3
-
 - name: Install ownCloud repository.
   apt_repository:
-    repo: 'deb https://download.owncloud.org/download/repositories/10.0/Debian_8.0/ /'
+    repo: 'deb http://download.owncloud.org/download/repositories/10.0/Debian_8.0/ /'
     state: present
 
 # https://github.com/owncloud/core/issues/23599#issuecomment-250678273
@@ -23,7 +13,7 @@
 
 - name: Add ownCloud repository key to the system.
   apt_key:
-    url: https://download.owncloud.org/download/repositories/10.0/Debian_8.0/Release.key
+    url: http://download.owncloud.org/download/repositories/10.0/Debian_8.0/Release.key
     state: present
 
 - name: Update apt cache to add ownCloud repo key.
