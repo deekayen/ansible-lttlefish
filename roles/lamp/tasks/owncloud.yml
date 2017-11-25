@@ -26,7 +26,6 @@
     state: latest
   with_items:
     - owncloud
-    - owncloud-deps-php7.0
     - owncloud-files
     - libreoffice-writer
     - clamav
