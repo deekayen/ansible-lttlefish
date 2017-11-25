@@ -25,7 +25,6 @@
     name: "{{ item }}"
     state: latest
   with_items:
-    - owncloud
     - owncloud-files
     - libreoffice-writer
     - clamav
