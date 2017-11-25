@@ -26,7 +26,6 @@
     state: latest
   with_items:
     - owncloud
-    - owncloud-3rdparty
     - owncloud-app-activity
     - owncloud-app-encryption
     - owncloud-app-external
