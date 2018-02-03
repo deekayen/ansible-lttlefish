@@ -3,11 +3,11 @@
 - hostname:
     name: "{{ hostname }}"
 
-- name: Install Jessie backports repository.
-  apt_repository:
-    repo: 'deb http://ftp.debian.org/debian jessie-backports main'
-    state: present
-  when: ansible_distribution == "Debian"
+
+
+
+
+
 
 - name: Install system utilities.
   apt:
