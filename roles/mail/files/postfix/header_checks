@@ -26,3 +26,4 @@
 /erect/ REJECT  Looks like spam (23).
 /mail-[0-9]+-[0-9]+\.rm000[0-9]\.net/    REJECT  Your network sends too much spam (24).
 /auth[0-9]+\.rm000[0-9]\.net/   REJECT Your network sends too much spam (25).
+/Canvas Prints/ REJECT  Welcome to my blacklist of bizarre spam topics (26).
