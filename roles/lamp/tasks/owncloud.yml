@@ -23,7 +23,7 @@
 - name: Install ownCloud.
   apt:
     name: "{{ item }}"
-    state: latest
+    state: present
   with_items:
     - owncloud-files
     - libreoffice-writer
@@ -40,19 +40,19 @@
   apt:
     name: pwgen
     state: present
-  when: owncloud_conf.stat.exists == False
+  when: not owncloud_conf.stat.exists
 
 - name: Generate a random ownCloud database password.
   shell: pwgen -B -s 24 1
   register: owncloud_dbpass
   ignore_errors: false
-  when: owncloud_conf.stat.exists == False
+  when: not owncloud_conf.stat.exists
 
 - name: Create a database for ownCloud.
   mysql_db:
     name: "{{ owncloud_dbname }}"
     state: present
-  when: owncloud_install_packages.changed == True
+  when: owncloud_install_packages.changed
 
 - name: Create a database user for ownCloud.
   mysql_user:

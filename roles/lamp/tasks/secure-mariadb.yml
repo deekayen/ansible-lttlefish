@@ -9,13 +9,13 @@
   apt:
     name: pwgen
     state: present
-  when: my_cnf.stat.exists == False
+  when: not my_cnf.stat.exists
 
 - name: Generate a random database root password.
   shell: pwgen -B -s 24 1
   register: mariadb_root_password
   ignore_errors: false
-  when: my_cnf.stat.exists == False
+  when: not my_cnf.stat.exists
 
 - name: Get list of hosts for the root user.
   command: >

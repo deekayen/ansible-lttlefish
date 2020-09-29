@@ -3,7 +3,7 @@
 - name: Ensure cron is installed.
   apt:
     name: cron
-    state: latest
+    state: present
 
 - name: Set cron to restart dnsmasq
   cron:
@@ -23,7 +23,7 @@
 - name: Install OpenVPN server.
   apt:
     name: "{{ item }}"
-    state: latest
+    state: present
     update_cache: yes
   with_items:
     - openvpn

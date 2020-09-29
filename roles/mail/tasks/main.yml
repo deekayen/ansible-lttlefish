@@ -18,7 +18,7 @@
 - name: Install Dovecot.
   apt:
     name: "{{ item }}"
-    state: latest
+    state: present
   with_items:
     - dovecot-core
     - dovecot-imapd
@@ -29,7 +29,7 @@
 - name: Install Postfix.
   apt:
     name: "{{ item }}"
-    state: latest
+    state: present
   with_items:
     - postfix
     - postfix-mysql
@@ -38,7 +38,7 @@
 - name: Install ClamAV.
   apt:
     name: "{{ item }}"
-    state: latest
+    state: present
   with_items:
     - clamav
     - clamav-base
@@ -47,7 +47,7 @@
 - name: Install OpenDKIM.
   apt:
     name: "{{ item }}"
-    state: latest
+    state: present
   with_items:
     - opendkim
     - opendkim-tools
@@ -55,7 +55,7 @@
 - name: Install procmail.
   apt:
     name: procmail
-    state: latest
+    state: present
 
 - name: Copy mailserver table SQL.
   copy:
@@ -103,8 +103,8 @@
 
 - name: Copy Dovecot configuration files.
   copy:
-    src: "{{item.src}}"
-    dest: "{{item.dest}}"
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
     owner: root
     group: root
     mode: 644

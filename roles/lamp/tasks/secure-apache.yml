@@ -37,7 +37,7 @@
 - name: Omit IP addresses from apache2 logs.
   apt:
     name: libapache2-mod-removeip
-    state: latest
+    state: present
 
 - name: Enable removeip module.
   apache2_module:

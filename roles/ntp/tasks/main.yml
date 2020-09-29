@@ -7,7 +7,7 @@
 - name: Install NTP if needed.
   apt:
     name: ntp
-    state: latest
+    state: present
 
 - name: Start NTP if needed.
   service:

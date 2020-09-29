@@ -11,7 +11,7 @@
 - name: Install unattended-upgrades.
   apt:
     name: unattended-upgrades
-    state: latest
+    state: present
 
 - name: Activate unattended-upgrades.
   copy:
