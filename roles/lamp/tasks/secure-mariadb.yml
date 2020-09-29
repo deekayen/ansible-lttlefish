@@ -48,9 +48,9 @@
 
 - name: Remove anonymous MariaDB users.
   mysql_user:
-     name: ""
-     host: "{{ item }}"
-     state: absent
+    name: ""
+    host: "{{ item }}"
+    state: absent
   with_items:
     - "{{ mariadb_anonymous_hosts.stdout_lines }}"
 
