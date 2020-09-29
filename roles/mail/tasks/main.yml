@@ -110,12 +110,12 @@
     mode: 644
     backup: yes
   with_items:
-    - { src: 'dovecot/10-auth.conf', dest: '/etc/dovecot/conf.d/10-auth.conf' }
-    - { src: 'dovecot/10-mail.conf', dest: '/etc/dovecot/conf.d/10-mail.conf' }
-    - { src: 'dovecot/10-master.conf', dest: '/etc/dovecot/conf.d/10-master.conf' }
-    - { src: 'dovecot/10-ssl.conf', dest: '/etc/dovecot/conf.d/10-ssl.conf' }
-    - { src: 'dovecot/20-imap.conf', dest: '/etc/dovecot/conf.d/20-imap.conf' }
-    - { src: 'dovecot/auth-sql.conf.ext', dest: '/etc/dovecot/conf.d/auth-sql.conf.ext' }
+    - {src: 'dovecot/10-auth.conf', dest: '/etc/dovecot/conf.d/10-auth.conf'}
+    - {src: 'dovecot/10-mail.conf', dest: '/etc/dovecot/conf.d/10-mail.conf'}
+    - {src: 'dovecot/10-master.conf', dest: '/etc/dovecot/conf.d/10-master.conf'}
+    - {src: 'dovecot/10-ssl.conf', dest: '/etc/dovecot/conf.d/10-ssl.conf'}
+    - {src: 'dovecot/20-imap.conf', dest: '/etc/dovecot/conf.d/20-imap.conf'}
+    - {src: 'dovecot/auth-sql.conf.ext', dest: '/etc/dovecot/conf.d/auth-sql.conf.ext'}
 
 - name: Copy Dovecot configuration templates.
   template:
@@ -126,8 +126,8 @@
     mode: 644
     backup: yes
   with_items:
-    - { src: 'dovecot/15-lda.conf.j2', dest: '/etc/dovecot/conf.d/15-lda.conf' }
-    - { src: 'dovecot/dovecot.conf.j2', dest: '/etc/dovecot/dovecot.conf' }
+    - {src: 'dovecot/15-lda.conf.j2', dest: '/etc/dovecot/conf.d/15-lda.conf'}
+    - {src: 'dovecot/dovecot.conf.j2', dest: '/etc/dovecot/dovecot.conf'}
 
 - name: Copy Dovecot SQL connection template.
   template:
@@ -146,9 +146,9 @@
     group: root
     mode: 644
   with_items:
-    - { src: 'postfix/header_checks', dest: '/etc/postfix/header_checks' }
-    - { src: 'postfix/body_checks', dest: '/etc/postfix/body_checks' }
-    - { src: 'postfix/helo_restrictions', dest: '/etc/postfix/helo_restrictions' }
+    - {src: 'postfix/header_checks', dest: '/etc/postfix/header_checks'}
+    - {src: 'postfix/body_checks', dest: '/etc/postfix/body_checks'}
+    - {src: 'postfix/helo_restrictions', dest: '/etc/postfix/helo_restrictions'}
 
 - name: Copy postfix main configuration.
   template:
@@ -182,9 +182,9 @@
     group: root
     mode: 644
   with_items:
-    - { src: 'postfix/mysql-virtual-alias-maps.cf.j2', dest: '/etc/postfix/mysql-virtual-alias-maps.cf' }
-    - { src: 'postfix/mysql-virtual-mailbox-domains.cf.j2', dest: '/etc/postfix/mysql-virtual-mailbox-domains.cf' }
-    - { src: 'postfix/mysql-virtual-mailbox-maps.cf.j2', dest: '/etc/postfix/mysql-virtual-mailbox-maps.cf' }
+    - {src: 'postfix/mysql-virtual-alias-maps.cf.j2', dest: '/etc/postfix/mysql-virtual-alias-maps.cf'}
+    - {src: 'postfix/mysql-virtual-mailbox-domains.cf.j2', dest: '/etc/postfix/mysql-virtual-mailbox-domains.cf'}
+    - {src: 'postfix/mysql-virtual-mailbox-maps.cf.j2', dest: '/etc/postfix/mysql-virtual-mailbox-maps.cf'}
   when: dovecot_sql.stat.exists == False
 
 - name: Whitelist policyd IPs from No-IP backup SMTP.
