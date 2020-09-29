@@ -1,5 +1,10 @@
 ---
 
+- name: Install dbus.
+  apt:
+    name: dbus
+    state: present
+
 - name: Set a hostname.
   hostname:
     name: "{{ hostname }}"
