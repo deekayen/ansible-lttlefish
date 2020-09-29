@@ -87,7 +87,7 @@
 - name: Update apt cache if MariaDB is not yet installed.
   apt:
     update_cache: yes
-  when: mariadb_installed.stat.exists == false
+  when: NOT mariadb_installed.stat.exists
 
 - name: Install MariaDB Server.
   apt:

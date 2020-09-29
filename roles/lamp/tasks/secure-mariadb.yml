@@ -18,7 +18,9 @@
   when: my_cnf.stat.exists == False
 
 - name: Get list of hosts for the root user.
-  command: mysql -NBe 'SELECT Host FROM mysql.user WHERE User = "root" ORDER BY (Host="localhost") ASC'
+  command: >
+    mysql -NBe
+    'SELECT Host FROM mysql.user WHERE User = "root" ORDER BY (Host="localhost") ASC'
   register: mariadb_root_hosts
   changed_when: false
 
@@ -28,7 +30,7 @@
     'SET PASSWORD FOR "root"@"{{ item }}" = PASSWORD("{{ mariadb_root_password.stdout }}");'
   with_items:
     - "{{ mariadb_root_hosts.stdout_lines }}"
-  when: mariadb_install_packages.changed == True and mariadb_root_password.changed == True
+  when: mariadb_install_packages.changed and mariadb_root_password.changed
 
 - name: Copy .my.cnf file with database root credentials.
   template:
@@ -37,7 +39,7 @@
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_gecos }}"
     mode: 0600
-  when: mariadb_root_password.changed == True
+  when: mariadb_root_password.changed
 
 - name: Get list of hosts for the anonymous user.
   command: mysql -NBe 'SELECT Host FROM mysql.user WHERE User = ""'

@@ -60,7 +60,7 @@
     password: "{{ owncloud_dbpass.stdout }}"
     priv: "owncloud.*:ALL"
     state: present
-  when: mariadb_install_packages.changed == True and owncloud_conf.stat.exists == False and owncloud_dbpass.changed == True
+  when: mariadb_install_packages.changed and NOT owncloud_conf.stat.exists and owncloud_dbpass.changed
 
 - name: Copy ownCloud config template.
   template:
@@ -69,4 +69,4 @@
     owner: www-data
     group: www-data
     mode: 770
-  when: owncloud_conf.stat.exists == False
+  when: NOT owncloud_conf.stat.exists
