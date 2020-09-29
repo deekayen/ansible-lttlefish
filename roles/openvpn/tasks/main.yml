@@ -35,11 +35,13 @@
   template:
     src: tcp.j2
     dest: /etc/openvpn/tcp.conf
+    mode: 0644
 
 - name: Add UDP configuration.
   template:
     src: udp.j2
     dest: /etc/openvpn/udp.conf
+    mode: 0644
 
 - include: obfsproxy.yml
   when: ansible_distribution == "Debian"

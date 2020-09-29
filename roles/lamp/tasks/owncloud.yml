@@ -43,7 +43,7 @@
   when: not owncloud_conf.stat.exists
 
 - name: Generate a random ownCloud database password.
-  shell: pwgen -B -s 24 1
+  command: pwgen -B -s 24 1
   register: owncloud_dbpass
   ignore_errors: false
   when: not owncloud_conf.stat.exists
@@ -68,5 +68,5 @@
     dest: /var/www/owncloud/config/config.php
     owner: www-data
     group: www-data
-    mode: 770
+    mode: 0770
   when: NOT owncloud_conf.stat.exists

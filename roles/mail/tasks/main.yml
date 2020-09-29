@@ -61,6 +61,7 @@
   copy:
     src: mailserver.sql
     dest: /tmp/mailserver.sql
+    mode: 0644
 
 - name: Create a database for mail configuration.
   mysql_db:
@@ -74,7 +75,7 @@
     name: "{{ mailserver_dbname }}"
     state: import
     target: /tmp/mailserver.sql
-  when: mailserver_db_created.changed == true
+  when: mailserver_db_created.changed
 
 - name: Check for existing mail database user.
   stat:
@@ -85,13 +86,13 @@
   apt:
     name: pwgen
     state: present
-  when: dovecot_sql.stat.exists == False
+  when: not dovecot_sql.stat.exists
 
 - name: Generate a random database root password.
   shell: pwgen -B -s 24 1
   register: mailserver_dbpass
   ignore_errors: false
-  when: dovecot_sql.stat.exists == False
+  when: not dovecot_sql.stat.exists
 
 - name: Create a database user for mail.
   mysql_user:
@@ -99,7 +100,7 @@
     password: "{{ mailserver_dbpass.stdout }}"
     priv: "{{ mailserver_dbname }}.*:SELECT"
     state: present
-  when: dovecot_sql.stat.exists == False and mailserver_dbpass.changed == True
+  when: not dovecot_sql.stat.exists and mailserver_dbpass.changed
 
 - name: Copy Dovecot configuration files.
   copy:
@@ -136,7 +137,7 @@
     owner: root
     group: root
     mode: 644
-  when: dovecot_sql.stat.exists == False
+  when: not dovecot_sql.stat.exists
 
 - name: Copy postfix regular expression checks.
   copy:
@@ -185,7 +186,7 @@
     - {src: 'postfix/mysql-virtual-alias-maps.cf.j2', dest: '/etc/postfix/mysql-virtual-alias-maps.cf'}
     - {src: 'postfix/mysql-virtual-mailbox-domains.cf.j2', dest: '/etc/postfix/mysql-virtual-mailbox-domains.cf'}
     - {src: 'postfix/mysql-virtual-mailbox-maps.cf.j2', dest: '/etc/postfix/mysql-virtual-mailbox-maps.cf'}
-  when: dovecot_sql.stat.exists == False
+  when: not dovecot_sql.stat.exists
 
 - name: Whitelist policyd IPs from No-IP backup SMTP.
   lineinfile:

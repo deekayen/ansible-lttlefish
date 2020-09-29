@@ -19,7 +19,7 @@
     dest: /etc/apt/apt.conf.d/20auto-upgrades
     owner: root
     group: root
-    mode: 644
+    mode: 0644
 
 - name: Ignore pings.
   sysctl:
@@ -35,7 +35,7 @@
     dest: /etc/hosts.allow
     owner: root
     group: root
-    mode: 644
+    mode: 0644
 
 - name: Upload sshd_config.
   copy:
@@ -43,4 +43,4 @@
     dest: /etc/ssh/sshd_config
     owner: root
     group: root
-    mode: 644
+    mode: 0644

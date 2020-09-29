@@ -12,7 +12,7 @@
   when: not my_cnf.stat.exists
 
 - name: Generate a random database root password.
-  shell: pwgen -B -s 24 1
+  command: pwgen -B -s 24 1
   register: mariadb_root_password
   ignore_errors: false
   when: not my_cnf.stat.exists

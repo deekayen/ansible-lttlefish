@@ -34,6 +34,6 @@
     dest: /etc/ntp.conf
     owner: root
     group: root
-    mode: 644
+    mode: 0644
     backup: yes
   notify: restart ntp

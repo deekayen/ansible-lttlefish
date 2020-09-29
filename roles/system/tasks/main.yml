@@ -1,6 +1,7 @@
 ---
 
-- hostname:
+- name: Set a hostname.
+  hostname:
     name: "{{ hostname }}"
 
 - name: Install system utilities.
@@ -66,7 +67,7 @@
   register: timechange
 
 - name: Reconfigure timezone data.
-  shell: dpkg-reconfigure -f noninteractive tzdata
+  command: dpkg-reconfigure -f noninteractive tzdata
   when: timechange.changed and ansible_os_family == "Debian"
 
 - name: Upload a new motd.
@@ -75,4 +76,4 @@
     dest: /etc/motd
     owner: root
     group: root
-    mode: 644
+    mode: 0644

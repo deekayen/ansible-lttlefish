@@ -22,7 +22,7 @@
 # Deflate is an "essential" module, requiring forced disable.
 - name: Disable deflate module to mitigate BREACH attack.
   command: /usr/sbin/a2dismod -f deflate
-  when: mod_deflate.stat.exists == True
+  when: mod_deflate.stat.exists
 
 - name: Disable CGI module.
   apache2_module:
