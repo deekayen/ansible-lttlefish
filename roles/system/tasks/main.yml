@@ -65,10 +65,7 @@
     group: root
     mode: 0644
   register: timechange
-
-- name: Reconfigure timezone data.
-  command: dpkg-reconfigure -f noninteractive tzdata
-  when: timechange.changed and ansible_os_family == "Debian"
+  notify: reconfigure timezone
 
 - name: Upload a new motd.
   copy:

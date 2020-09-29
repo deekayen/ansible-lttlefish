@@ -69,4 +69,4 @@
     owner: www-data
     group: www-data
     mode: 0770
-  when: NOT owncloud_conf.stat.exists
+  when: not owncloud_conf.stat.exists
