@@ -89,7 +89,7 @@
   when: not dovecot_sql.stat.exists
 
 - name: Generate a random database root password.
-  shell: pwgen -B -s 24 1
+  command: pwgen -B -s 24 1
   register: mailserver_dbpass
   ignore_errors: false
   when: not dovecot_sql.stat.exists
@@ -108,7 +108,7 @@
     dest: "{{ item.dest }}"
     owner: root
     group: root
-    mode: 644
+    mode: 0644
     backup: yes
   with_items:
     - {src: 'dovecot/10-auth.conf', dest: '/etc/dovecot/conf.d/10-auth.conf'}
@@ -124,7 +124,7 @@
     dest: "{{ item.dest }}"
     owner: root
     group: root
-    mode: 644
+    mode: 0644
     backup: yes
   with_items:
     - {src: 'dovecot/15-lda.conf.j2', dest: '/etc/dovecot/conf.d/15-lda.conf'}
@@ -136,7 +136,7 @@
     dest: /etc/dovecot/dovecot-sql.conf.ext
     owner: root
     group: root
-    mode: 644
+    mode: 0644
   when: not dovecot_sql.stat.exists
 
 - name: Copy postfix regular expression checks.
@@ -145,7 +145,7 @@
     dest: "{{ item.dest }}"
     owner: root
     group: root
-    mode: 644
+    mode: 0644
   with_items:
     - {src: 'postfix/header_checks', dest: '/etc/postfix/header_checks'}
     - {src: 'postfix/body_checks', dest: '/etc/postfix/body_checks'}
@@ -157,7 +157,7 @@
     dest: /etc/postfix/main.cf
     owner: root
     group: root
-    mode: 644
+    mode: 0644
 
 - name: Copy postfix master configuration.
   copy:
@@ -165,7 +165,7 @@
     dest: /etc/postfix/master.cf
     owner: root
     group: root
-    mode: 644
+    mode: 0644
 
 - name: Copy mailname.
   template:
@@ -173,7 +173,7 @@
     dest: /etc/mailname
     owner: root
     group: root
-    mode: 644
+    mode: 0644
 
 - name: Copy postfix virtual mailbox mapping.
   template:
@@ -181,7 +181,7 @@
     dest: "{{ item.dest }}"
     owner: root
     group: root
-    mode: 644
+    mode: 0644
   with_items:
     - {src: 'postfix/mysql-virtual-alias-maps.cf.j2', dest: '/etc/postfix/mysql-virtual-alias-maps.cf'}
     - {src: 'postfix/mysql-virtual-mailbox-domains.cf.j2', dest: '/etc/postfix/mysql-virtual-mailbox-domains.cf'}
