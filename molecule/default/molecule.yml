@@ -6,7 +6,8 @@ driver:
 lint: |
   set -e
   /usr/bin/yamllint . &&
-  ansible-lint &&
+  ansible-lint --version &&
+  ansible-lint -v &&
   flake8
 platforms:
   - name: instance
