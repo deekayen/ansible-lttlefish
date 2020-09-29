@@ -3,12 +3,6 @@
 - hostname:
     name: "{{ hostname }}"
 
-
-
-
-
-
-
 - name: Install system utilities.
   apt:
     name: "{{ item }}"
@@ -35,6 +29,7 @@
     - openssh-sftp-server
     - p7zip
     - patch
+    - python3-pip
     - rsync
     - screen
     - sed
@@ -81,10 +76,3 @@
     owner: root
     group: root
     mode: 644
-
-# https://stackoverflow.com/questions/28987891/patch-pyopenssl-for-sslv3-issue#29081240
-- name: Upgrade pip.
-  command: easy_install --upgrade pip
-
-- name: Upgrade python requests since Debian doesn't compile SSLv3 support.
-  command: pip install --upgrade requests
