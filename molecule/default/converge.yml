@@ -1,0 +1,12 @@
+---
+- name: Configure a lttle Debian-based Linode.
+  hosts: all
+  become: yes
+
+  roles:
+    - system
+    - security
+    - ntp
+    - lamp
+    - mail
+    - openvpn

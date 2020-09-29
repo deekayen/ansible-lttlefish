@@ -1,27 +1,28 @@
+---
+
 language: python
-sudo: required
-dist: trusty
+dist: focal
+services: docker
+
+env:
+  jobs:
+    - MOLECULE_DISTRO: ubuntu2004
+    - MOLECULE_DISTRO: debian10
+
 addons:
   apt:
+    sources:
+      - sourceline: 'deb https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable'
     packages:
-    - openssh-server
-    - software-properties-common
-  ssh_known_hosts:
-    - localhost
-    - 127.0.0.1
-services:
-  - ssh
-before_install:
-  - sudo apt-add-repository ppa:ansible/ansible -y
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq ansible -y
-before_script:
-  - ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
-  - cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-script: ansible-playbook --diff -i localhost, -c local lttle.yml
-after_failure:
-  - echo "Failures detected. Outputing additional logs:"
-  - sudo cat /var/log/apache2/error.log
-  - sudo cat /var/log/mysql.err
-  - sudo cat /var/log/owncloud.log
-  - sudo cat /var/log/mail.err
+      - docker
+      - yamllint
+    update: true
+
+install:
+  - pip install --upgrade --upgrade-strategy eager -r requirements.txt
+
+script:
+  - molecule test
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
