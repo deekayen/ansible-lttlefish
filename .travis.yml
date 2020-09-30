@@ -8,7 +8,6 @@ env:
   jobs:
     - MOLECULE_DISTRO: debian10
     - MOLECULE_DISTRO: debian9
-    - MOLECULE_DISTRO: debian8
 
 addons:
   apt:
