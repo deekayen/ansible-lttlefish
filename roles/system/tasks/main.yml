@@ -45,7 +45,6 @@
     - rsync
     - screen
     - sed
-    - sysbench
     - tar
     - tcpdump
     - telnet
