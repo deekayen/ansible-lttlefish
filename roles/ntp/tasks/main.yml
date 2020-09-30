@@ -22,8 +22,13 @@
     state: present
     reload: yes
 
+- name: Start rc-local service.
+  service:
+    name: rc-local
+    state: started
+
 # Size is nf_conntrack_max / 4
-- name: "Increase nf_conntrack hash table."
+- name: Increase nf_conntrack hash table.
   lineinfile:
     dest: /etc/rc.local
     line: echo 196608 > /sys/module/nf_conntrack/parameters/hashsize
