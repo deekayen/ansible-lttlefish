@@ -5,6 +5,11 @@
     name: dbus
     state: present
 
+- name: Start dbus.
+  service:
+    name: dbus
+    state: started
+
 - name: Set a hostname.
   hostname:
     name: "{{ hostname }}"
