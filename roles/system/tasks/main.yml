@@ -10,9 +10,10 @@
     name: dbus
     state: started
 
-- name: Set a hostname.
-  hostname:
-    name: "{{ hostname }}"
+# Breaks molecule testing - not allowed to edit /etc/hosts in containers.
+#- name: Set a hostname.
+#  hostname:
+#    name: "{{ hostname }}"
 
 - name: Install system utilities.
   apt:
