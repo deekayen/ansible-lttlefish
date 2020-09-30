@@ -1,12 +1,13 @@
 ---
 
 language: python
-dist: bionic
+dist: focal
 services: docker
 
 env:
   jobs:
-    - MOLECULE_DISTRO: ubuntu1604
+    - MOLECULE_DISTRO: debian10
+    - MOLECULE_DISTRO: debian9
     - MOLECULE_DISTRO: debian8
 
 addons:
