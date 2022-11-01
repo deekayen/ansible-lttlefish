@@ -7,7 +7,7 @@
 
 - name: Add Tor repo.
   apt_repository:
-    repo: deb http://deb.torproject.org/torproject.org jessie main
+    repo: deb http://deb.torproject.org/torproject.org bullseye main
     filename: tor
     state: present
     update_cache: yes
@@ -22,4 +22,4 @@
 
 # Add to /etc/rc.local
 - debug:
-    msg: "obfsproxy obfs3 --dest=vpn.deekayen.net:443 server 0.0.0.0:80 &"
+    msg: "obfsproxy obfs3 --dest=vpn.deekayen.net:109 server 0.0.0.0:80 &"
