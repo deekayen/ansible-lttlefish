@@ -1,12 +1,12 @@
 ---
-- name: Configure a lttle Debian-based Linode.
+- name: Configure a lttle OpenBSD-based Linode.
   hosts: all
   become: yes
 
   roles:
     - system
-    - security
     - ntp
-    - lamp
-    - mail
-    - openvpn
+    - security
+#    - lamp
+#    - mail
+#    - openvpn

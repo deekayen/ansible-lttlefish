@@ -1,86 +1,40 @@
 ---
 
-- name: Install dbus.
-  apt:
-    name: dbus
-    state: present
-
-- name: Start dbus.
-  service:
-    name: dbus
-    state: started
-
-# Breaks molecule testing - not allowed to edit /etc/hosts in containers.
-#- name: Set a hostname.
-#  hostname:
-#    name: "{{ hostname }}"
-
 - name: Install system utilities.
-  apt:
+  community.general.openbsd_pkg:
     name: "{{ item }}"
     state: present
   with_items:
-    - apt-transport-https
     - bzip2
     - curl
-    - diffutils
-    - dnsutils
-    - etckeeper
-    - findutils
     - git
-    - git-core
     - gnupg
-    - gzip
     - htop
     - lynx
     - nano
     - nmap
-    - openssl
-    - openssh-client
-    - openssh-server
-    - openssh-sftp-server
-    - p7zip
-    - patch
-    - python3-pip
-    - rsync
-    - screen
-    - sed
-    - tar
-    - tcpdump
-    - telnet
-    - traceroute
-    - unrar-free
-    - unzip
-    - vim
+    - rsync--
+    - unzip--
+    - vim--no_x11
     - wget
-    - xz-utils
-    - zip
-    - zoo
-  when: ansible_os_family == 'Debian'
 
 - name: Install certbot.
-  apt:
-    name: "{{ item }}"
+  community.general.openbsd_pkg:
+    name: certbot
     state: present
-  with_items:
-    - certbot
-    - python-certbot-apache
-  when: ansible_distribution == "Debian"
 
-- name: Set timezone.
-  copy:
-    content: "{{ timezone }}\n"
-    dest: /etc/timezone
+- name: Configure timezone for US/Eastern.
+  ansible.builtin.file:
+    src: /etc/localtime
+    dest: "{{ localtime_timezone }}"
     owner: root
-    group: root
-    mode: 0644
-  register: timechange
-  notify: reconfigure timezone
+    group: wheel
+    state: hard
 
 - name: Upload a new motd.
-  copy:
+  ansible.builtin.copy:
     src: motd
     dest: /etc/motd
     owner: root
-    group: root
-    mode: 0644
+    group: operator
+    mode: 0664

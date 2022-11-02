@@ -1,44 +1,10 @@
 ---
-- name: Update apt cache if needed.
-  apt:
-    update_cache: yes
-    cache_valid_time: 3600
-
-- name: Install NTP if needed.
-  apt:
-    name: ntp
-    state: present
-
-- name: Start NTP if needed.
-  service:
-    name: ntp
-    state: started
-
-- name: Set maximum tracked connections to 786432.
-  sysctl:
-    name: "net.netfilter.nf_conntrack_max"
-    value: 786432
-    sysctl_set: yes
-    state: present
-    reload: yes
-
-- name: Start rc-local service.
-  service:
-    name: rc-local
-    state: started
-
-# Size is nf_conntrack_max / 4
-- name: Increase nf_conntrack hash table.
-  lineinfile:
-    dest: /etc/rc.local
-    line: echo 196608 > /sys/module/nf_conntrack/parameters/hashsize
 
 - name: Copy ntp.conf.
-  copy:
-    src: ntp.conf
-    dest: /etc/ntp.conf
+  template:
+    src: ntpd.conf.j2
+    dest: /etc/ntpd.conf
     owner: root
-    group: root
+    group: wheel
     mode: 0644
     backup: yes
-  notify: restart ntp

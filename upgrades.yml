@@ -1,0 +1,10 @@
+---
+
+- hosts: all
+  become: true
+
+  tasks:
+    - name: pkg_add -u
+      command: /usr/sbin/pkg_add -u
+    - name: syspatch
+      command: /usr/sbin/syspatch
