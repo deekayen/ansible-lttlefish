@@ -14,26 +14,25 @@
     name: headers
   when: not ansible_check_mode
 
-- name: Copy Apache ServerName to prevent notices.
-  ansible.builtin.template:
-    src: httpd.conf.j2
-    dest: /etc/apache2/conf-available/httpd.conf
-    mode: 0644
+- name: Set non-defualt Apache ServerName to prevent notices.
+  ansible.builtin.lineinfile:
+    dest: /etc/apache2/httpd2.conf
+    regexp: "^#ServerName www.example.com:80"
+    line: "ServerName {{ ansible_fqdn }}"
+    state: present
 
-- name: Copy Apache ports configuration.
-  ansible.builtin.template:
-    src: ports.conf.j2
-    dest: /etc/apache2/ports.conf
-    mode: 0644
+- name: Look for SSL configuration in apache.
+  ansible.builtin.lineinfile:
+    dest: /etc/apache2/httpd2.conf
+    regexp: "^#Include /etc/apache2/extra/httpd-ssl.conf"
+    line: "Include /etc/apache2/extra/httpd-ssl.conf"
+    state: present
 
-- name: Check for existing httpd.conf.
-  ansible.builtin.stat:
-    path: /etc/apache2/conf-enabled/httpd.conf
-  register: apache_httpd_conf
-
-- name: Enable Apache httpd configuration file.
-  ansible.builtin.command: /usr/sbin/a2enconf httpd
-  when: apache_httpd_conf.stat.islnk is not defined
+#- name: Copy Apache ports configuration.
+#  ansible.builtin.template:
+#    src: ports.conf.j2
+#    dest: /etc/apache2/ports.conf
+#    mode: 0644
 
 - name: "Install PHP graphics lib dependencies."
   community.general.openbsd_pkg:
