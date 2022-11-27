@@ -1,19 +1,11 @@
 ---
 
-- name: Update apt cache if needed.
-  apt:
-    update_cache: yes
-    cache_valid_time: 3600
-
 - name: "Install Apache."
-  apt:
+  community.general.openbsd_pkg:
     name: "{{ item }}"
     state: present
   with_items:
-    - apache2
-    - apache2-bin
-    - apache2-data
-    - apache2-utils
+    - apache-httpd
     - apachetop
 
 - name: Enable Apache headers module.
@@ -22,75 +14,47 @@
     name: headers
 
 - name: Copy Apache ServerName to prevent notices.
-  template:
+  ansible.builtin.template:
     src: httpd.conf.j2
     dest: /etc/apache2/conf-available/httpd.conf
     mode: 0644
 
 - name: Copy Apache ports configuration.
-  template:
+  ansible.builtin.template:
     src: ports.conf.j2
     dest: /etc/apache2/ports.conf
     mode: 0644
 
 - name: Check for existing httpd.conf.
-  stat:
+  ansible.builtin.stat:
     path: /etc/apache2/conf-enabled/httpd.conf
   register: apache_httpd_conf
 
 - name: Enable Apache httpd configuration file.
-  command: /usr/sbin/a2enconf httpd
+  ansible.builtin.command: /usr/sbin/a2enconf httpd
   when: apache_httpd_conf.stat.islnk is not defined
 
 - name: "Install PHP."
-  apt:
+  community.general.openbsd_pkg:
     name: "{{ item }}"
     state: present
   with_items:
-    - php-pear
-    - php-xml-parser
-    - php5
-    - php5-apcu
-    - php5-cgi
-    - php5-cli
-    - php5-common
-    - php5-curl
-    - php5-dev
-    - php5-gd
-    - php5-imagick
-    - php5-intl
-    - php5-json
-    - php5-mcrypt
-    - php5-mysqlnd
-    - php5-pgsql
-    - php5-readline
-    - php5-recode
-    - php5-sqlite
-    - php5-xmlrpc
-    - libapache2-mod-php5
+    - php-apache%8.0
+    - pear
+    - php-curl%8.0
+    - php-gd%8.0
+    - pecl80-imagick
+    - php-intl%8.0
+    - pecl80-mcrypt
+    - php-mysqli%8.0
+    - php-pgsql%8.0
+    - php-sqlite3%8.0
   notify: restart apache2
 
-- name: Increase default php5-apcu shm size.
-  lineinfile:
-    dest: /etc/php5/apache2/conf.d/20-apcu.ini
-    regexp: "^apc.shm"
-    line: "apc.shm_size=128M"
-    state: present
-
-- name: Install Python software properties.
-  apt:
-    name: python-software-properties
-    state: present
-
 - name: Check if MariaDB is already installed.
-  stat:
+  ansible.builtin.stat:
     path: /etc/init.d/mysql
   register: mariadb_installed
-
-- name: Update apt cache if MariaDB is not yet installed.
-  apt:
-    update_cache: yes
-  when: NOT mariadb_installed.stat.exists
 
 - name: Install MariaDB Server.
   apt:
@@ -99,24 +63,8 @@
   with_items:
     - mariadb-server
     - mariadb-client
-    - mariadb-common
-    - python-mysqldb
+    - py3-mysqlclient
   register: mariadb_install_packages
-  when: ansible_distribution == "Debian"
-
-- name: Install MySQL Server.
-  apt:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - mysql-common-5.6
-    - mysql-client-core-5.6
-    - mysql-client-5.6
-    - mysql-server-core-5.6
-    - mysql-server-5.6
-    - python-mysqldb
-  register: mariadb_install_packages
-  when: ansible_distribution == "Ubuntu" and ansible_distribution_release == "trusty"
 
 - include: secure-apache.yml
 - include: secure-mariadb.yml

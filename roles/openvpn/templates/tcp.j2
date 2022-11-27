@@ -84,7 +84,7 @@ key server.key  # This file should be kept secret
 #   openssl dhparam -out dh1024.pem 1024
 # Substitute 2048 for 1024 if you are using
 # 2048 bit keys.
-dh dh4096.pem
+dh dh2048.pem
 
 # Configure server mode and supply a VPN subnet
 # for OpenVPN to draw client addresses from.
@@ -195,7 +195,7 @@ push "redirect-gateway def1 bypass-dhcp"
 push "dhcp-option DNS 172.29.0.1"
 push "dhcp-option DNS {{ linode_dns_resolver1 }}"
 push "dhcp-option DNS {{ linode_dns_resolver2 }}"
-push "dhcp-option DNS 8.8.8.8"
+push "dhcp-option DNS 1.1.1.2"
 
 # Uncomment this directive to allow different
 # clients to be able to "see" each other.
@@ -247,9 +247,9 @@ tls-auth ta.key 0 # This file is secret
 ;cipher AES-128-CBC   # AES
 ;cipher DES-EDE3-CBC  # Triple-DES
 ;cipher RC2-40-CBC
-cipher AES-256-CBC
-tls-cipher TLS-DHE-RSA-WITH-AES-256-GCM-SHA384:TLS-DHE-RSA-WITH-AES-128-GCM-SHA256:TLS-DHE-RSA-WITH-AES-256-CBC-SHA:TLS-DHE-RSA-WITH-CAMELLIA-256-CBC-SHA:TLS-DHE-RSA-WITH-AES-128-CBC-SHA:TLS-DHE-RSA-WITH-CAMELLIA-128-CBC-SHA
-auth SHA512
+;cipher AES-256-CBC
+cipher CHACHA20-POLY1305:AES-256-GCM:AES-128-GCM
+tls-cipher TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:TLS-DHE-RSA-WITH-AES-256-GCM-SHA384:TLS-DHE-RSA-WITH-AES-128-GCM-SHA256:TLS-DHE-RSA-WITH-AES-256-CBC-SHA:TLS-DHE-RSA-WITH-CAMELLIA-256-CBC-SHA:TLS-DHE-RSA-WITH-AES-128-CBC-SHA:TLS-DHE-RSA-WITH-CAMELLIA-128-CBC-SHAauth auth SHA3-512
 
 # Enable compression on the VPN link.
 # If you enable it here, you must also

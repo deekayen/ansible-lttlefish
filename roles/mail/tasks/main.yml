@@ -1,64 +1,43 @@
 ---
-- name: Update apt cache if needed.
-  apt:
-    update_cache: yes
-    cache_valid_time: 3600
-
-- name: Remove exim.
-  apt:
-    name: "{{ item }}"
-    state: absent
-    purge: yes
-  with_items:
-    - exim4
-    - exim4-base
-    - exim4-config
-    - exim4-daemon-light
 
 - name: Install Dovecot.
-  apt:
+  community.general.openbsd_pkg:
     name: "{{ item }}"
     state: present
   with_items:
-    - dovecot-core
-    - dovecot-imapd
-    - dovecot-lmtpd
+    - dovecot
     - dovecot-mysql
-    - dovecot-pop3d
 
 - name: Install Postfix.
-  apt:
+  community.general.openbsd_pkg:
     name: "{{ item }}"
     state: present
   with_items:
-    - postfix
-    - postfix-mysql
-    - postfix-policyd-spf-python
+    - postfix%stable,mysql
+    - py-policyd-spf
 
 - name: Install ClamAV.
-  apt:
+  community.general.openbsd_pkg:
     name: "{{ item }}"
     state: present
   with_items:
     - clamav
-    - clamav-base
-    - clamav-freshclam
+    - clamav-unofficial-sigs
 
 - name: Install OpenDKIM.
-  apt:
+  community.general.openbsd_pkg:
     name: "{{ item }}"
     state: present
   with_items:
     - opendkim
-    - opendkim-tools
 
 - name: Install procmail.
-  apt:
+  community.general.openbsd_pkg:
     name: procmail
     state: present
 
 - name: Copy mailserver table SQL.
-  copy:
+  ansible.builtin.copy:
     src: mailserver.sql
     dest: /tmp/mailserver.sql
     mode: 0644
@@ -78,12 +57,12 @@
   when: mailserver_db_created.changed
 
 - name: Check for existing mail database user.
-  stat:
+  ansible.builtin.stat:
     path: /etc/dovecot/dovecot-sql.conf.ext
   register: dovecot_sql
 
 - name: Install random password generator.
-  apt:
+  community.general.openbsd_pkg:
     name: pwgen
     state: present
   when: not dovecot_sql.stat.exists
@@ -103,7 +82,7 @@
   when: not dovecot_sql.stat.exists and mailserver_dbpass.changed
 
 - name: Copy Dovecot configuration files.
-  copy:
+  ansible.builtin.copy:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     owner: root
@@ -119,7 +98,7 @@
     - {src: 'dovecot/auth-sql.conf.ext', dest: '/etc/dovecot/conf.d/auth-sql.conf.ext'}
 
 - name: Copy Dovecot configuration templates.
-  template:
+  ansible.builtin.template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     owner: root
@@ -131,7 +110,7 @@
     - {src: 'dovecot/dovecot.conf.j2', dest: '/etc/dovecot/dovecot.conf'}
 
 - name: Copy Dovecot SQL connection template.
-  template:
+  ansible.builtin.template:
     src: dovecot/dovecot-sql.conf.ext.j2
     dest: /etc/dovecot/dovecot-sql.conf.ext
     owner: root
@@ -140,7 +119,7 @@
   when: not dovecot_sql.stat.exists
 
 - name: Copy postfix regular expression checks.
-  copy:
+  ansible.builtin.copy:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     owner: root
@@ -152,7 +131,7 @@
     - {src: 'postfix/helo_restrictions', dest: '/etc/postfix/helo_restrictions'}
 
 - name: Copy postfix main configuration.
-  template:
+  ansible.builtin.template:
     src: postfix/main.cf.j2
     dest: /etc/postfix/main.cf
     owner: root
@@ -160,7 +139,7 @@
     mode: 0644
 
 - name: Copy postfix master configuration.
-  copy:
+  ansible.builtin.copy:
     src: postfix/master.cf
     dest: /etc/postfix/master.cf
     owner: root
@@ -168,7 +147,7 @@
     mode: 0644
 
 - name: Copy mailname.
-  template:
+  ansible.builtin.template:
     src: postfix/mailname.j2
     dest: /etc/mailname
     owner: root
@@ -176,7 +155,7 @@
     mode: 0644
 
 - name: Copy postfix virtual mailbox mapping.
-  template:
+  ansible.builtin.template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     owner: root
@@ -189,7 +168,7 @@
   when: not dovecot_sql.stat.exists
 
 - name: Whitelist policyd IPs from No-IP backup SMTP.
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/postfix-policyd-spf-python/policyd-spf.conf
     regexp: "^skip_addresses "
     line: "skip_addresses = 127.0.0.0/8,::ffff:127.0.0.0/104,::1,8.23.224.50,69.65.5.119,69.65.5.110"

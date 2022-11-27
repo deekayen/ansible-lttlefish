@@ -5,12 +5,14 @@
     name: "{{ item }}"
     state: present
   with_items:
+    - ansible
     - bzip2
     - curl
     - git
     - gnupg
     - htop
     - lynx
+    - mosh
     - nano
     - nmap
     - rsync--

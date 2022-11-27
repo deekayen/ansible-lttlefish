@@ -1,10 +1,5 @@
 ---
 
-- name: Ensure cron is installed.
-  apt:
-    name: cron
-    state: present
-
 - name: Set cron to restart dnsmasq
   cron:
     name: "Flush dnsmasq caches"
@@ -14,22 +9,20 @@
 
 - name: Enable IPv4 forwarding
   sysctl:
-    name: "net.ipv4.ip_forward"
+    name: "net.inet.ip.forwarding"
     value: 1
     sysctl_set: yes
     state: present
     reload: yes
 
 - name: Install OpenVPN server.
-  apt:
+  community.general.openbsd_pkg:
     name: "{{ item }}"
     state: present
-    update_cache: yes
   with_items:
     - openvpn
     - easy-rsa
     - dnsmasq
-    - dnsmasq-base
 
 - name: Add TCP configuration.
   template:
@@ -42,6 +35,3 @@
     src: udp.j2
     dest: /etc/openvpn/udp.conf
     mode: 0644
-
-- include: obfsproxy.yml
-  when: ansible_distribution == "Debian"

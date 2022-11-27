@@ -1,27 +1,27 @@
 ---
 
 - name: Set ServerSignature.
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/apache2/conf-available/security.conf
     regexp: "^ServerSignature "
     line: "ServerSignature Off"
     state: present
 
 - name: Set ServerTokens.
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/apache2/conf-available/security.conf
     regexp: "^ServerTokens "
     line: "ServerTokens Prod"
     state: present
 
 - name: Check for deflate module.
-  stat:
+  ansible.builtin.stat:
     path: /etc/apache2/mods-enabled/deflate.load
   register: mod_deflate
 
 # Deflate is an "essential" module, requiring forced disable.
 - name: Disable deflate module to mitigate BREACH attack.
-  command: /usr/sbin/a2dismod -f deflate
+  ansible.builtin.command: /usr/sbin/a2dismod -f deflate
   when: mod_deflate.stat.exists
 
 - name: Disable CGI module.
@@ -33,13 +33,3 @@
   apache2_module:
     state: present
     name: ssl
-
-- name: Omit IP addresses from apache2 logs.
-  apt:
-    name: libapache2-mod-removeip
-    state: present
-
-- name: Enable removeip module.
-  apache2_module:
-    state: present
-    name: removeip

@@ -1,0 +1,48 @@
+---
+
+- name: Install NextCloud.
+  community.general.openbsd_pkg:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - nextcloud
+    - clamav
+  register: nextcloud_install_packages
+
+- name: Check for existing ownCloud install.
+  ansible.builtin.stat:
+    path: /var/www/owncloud/config/config.php
+  register: nextcloud_conf
+
+- name: Install random password generator.
+  community.general.openbsd_pkg:
+    name: pwgen
+    state: present
+  when: not nextcloud_conf.stat.exists
+
+- name: Generate a random NextCloud database password.
+  ansible.builtin.command: pwgen -B -s 24 1
+  register: nextcloud_dbpass
+  ignore_errors: false
+  when: not nextcloud_conf.stat.exists
+
+- name: Create a database for NextCloud.
+  mysql_db:
+    name: "{{ nextcloud_dbname }}"
+    state: present
+  when: nextcloud_install_packages.changed
+
+- name: Create a database user for NextCloud.
+  mysql_user:
+    name: "{{ nextcloud_dbuser }}"
+    password: "{{ nextcloud_dbpass.stdout }}"
+    priv: "nextcloud.*:ALL"
+    state: present
+  when: mariadb_install_packages.changed and NOT nextcloud_conf.stat.exists and nextcloud_dbpass.changed
+
+- name: Copy NextCloud config template.
+  ansible.builtin.template:
+    src: nextcloud_config.php.j2
+    dest: /var/www/nextcloud/config/config.php
+    mode: 0770
+  when: not nextcloud_conf.stat.exists
