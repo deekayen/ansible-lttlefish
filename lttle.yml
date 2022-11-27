@@ -7,6 +7,6 @@
     - system
     - ntp
     - security
-#    - lamp
-#    - mail
-#    - openvpn
+    - openvpn
+    - lamp
+    - mail

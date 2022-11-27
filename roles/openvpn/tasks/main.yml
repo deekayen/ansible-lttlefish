@@ -1,14 +1,14 @@
 ---
 
 - name: Set cron to restart dnsmasq
-  cron:
+  ansible.builtin.cron:
     name: "Flush dnsmasq caches"
     minute: "8"
     hour: "4"
     job: "/usr/sbin/service dnsmasq restart >/dev/null 2>&1"
 
 - name: Enable IPv4 forwarding
-  sysctl:
+  ansible.builtin.sysctl:
     name: "net.inet.ip.forwarding"
     value: 1
     sysctl_set: yes
@@ -20,18 +20,23 @@
     name: "{{ item }}"
     state: present
   with_items:
-    - openvpn
+    - openvpn--
     - easy-rsa
     - dnsmasq
 
+- name: Create OpenVPN config directory in /etc.
+  ansible.builtin.file:
+    path: /etc/openvpn
+    state: directory
+
 - name: Add TCP configuration.
-  template:
+  ansible.builtin.template:
     src: tcp.j2
     dest: /etc/openvpn/tcp.conf
     mode: 0644
 
 - name: Add UDP configuration.
-  template:
+  ansible.builtin.template:
     src: udp.j2
     dest: /etc/openvpn/udp.conf
     mode: 0644

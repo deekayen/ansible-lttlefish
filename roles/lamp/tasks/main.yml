@@ -12,6 +12,7 @@
   apache2_module:
     state: present
     name: headers
+  when: not ansible_check_mode
 
 - name: Copy Apache ServerName to prevent notices.
   ansible.builtin.template:
@@ -33,6 +34,16 @@
 - name: Enable Apache httpd configuration file.
   ansible.builtin.command: /usr/sbin/a2enconf httpd
   when: apache_httpd_conf.stat.islnk is not defined
+
+- name: "Install PHP graphics lib dependencies."
+  community.general.openbsd_pkg:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - djvulibre
+    - freetype
+    - gd
+    - ImageMagick
 
 - name: "Install PHP."
   community.general.openbsd_pkg:
@@ -57,7 +68,7 @@
   register: mariadb_installed
 
 - name: Install MariaDB Server.
-  apt:
+  community.general.openbsd_pkg:
     name: "{{ item }}"
     state: present
   with_items:
@@ -66,7 +77,7 @@
     - py3-mysqlclient
   register: mariadb_install_packages
 
-- include: secure-apache.yml
-- include: secure-mariadb.yml
-- include: hosts.yml
-- include: owncloud.yml
+- include_tasks: secure-apache.yml
+- include_tasks: secure-mariadb.yml
+- include_tasks: hosts.yml
+- include_tasks: nextcloud.yml
