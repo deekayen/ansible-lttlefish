@@ -7,3 +7,12 @@
    ServerAlias *.pool.ntp.org *.ntppool.org
    Redirect permanent / http://www.pool.ntp.org/
 </VirtualHost>
+
+<VirtualHost dkn.email:443>
+   ServerName dkn.email
+   ServerAlias mail.deekayen.net mail.dkn.me
+   ServerAdmin deekayen@deekayen.net
+   DocumentRoot "/var/www/squirrelmail"
+   ErrorLog "logs/dkn.email-error_log"
+   TransferLog "logs/dkn.email-access_log"
+</VirtualHost>
