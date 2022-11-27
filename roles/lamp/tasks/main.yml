@@ -14,7 +14,7 @@
     name: headers
   when: not ansible_check_mode
 
-- name: Set non-defualt Apache ServerName to prevent notices.
+- name: Set non-default Apache ServerName to prevent notices.
   ansible.builtin.lineinfile:
     dest: /etc/apache2/httpd2.conf
     regexp: "^#ServerName www.example.com:80"
@@ -41,8 +41,6 @@
   with_items:
     - djvulibre
     - freetype
-    - gd
-    - ImageMagick
 
 - name: "Install PHP."
   community.general.openbsd_pkg:
