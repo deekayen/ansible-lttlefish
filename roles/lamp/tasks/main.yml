@@ -74,6 +74,7 @@
     - py3-mysqlclient
   register: mariadb_install_packages
 
+- include_tasks: squirrelmail.yml
 - include_tasks: secure-apache.yml
 - include_tasks: secure-mariadb.yml
 - include_tasks: hosts.yml

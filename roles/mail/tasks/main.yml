@@ -81,6 +81,11 @@
     state: present
   when: not dovecot_sql.stat.exists and mailserver_dbpass.changed
 
+- name: Generate DH Parameters for Dovecot.
+  community.crypto.openssl_dhparam:
+    path: /etc/dovecot/dh.pem
+    size: 2048
+
 - name: Copy Dovecot configuration files.
   ansible.builtin.copy:
     src: "{{ item.src }}"
