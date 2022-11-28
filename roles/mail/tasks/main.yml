@@ -70,7 +70,7 @@
     mode: 0644
 
 - name: Install PyMySQL for mysql_db ansible support.
-  pip:
+  ansible.builtin.pip:
     name:
       - PyMySQL
       - mysqlclient
@@ -101,7 +101,7 @@
   when: not dovecot_sql.stat.exists
 
 - name: Generate a random database root password.
-  command: pwgen -B -s 24 1
+  ansible.builtin.command: pwgen -B -s 24 1
   register: mailserver_dbpass
   ignore_errors: false
   when: not dovecot_sql.stat.exists
@@ -134,7 +134,7 @@
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     owner: root
-    group: root
+    group: wheel
     mode: 0644
     backup: yes
   with_items:
@@ -150,7 +150,7 @@
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     owner: root
-    group: root
+    group: wheel
     mode: 0644
     backup: yes
   with_items:
@@ -162,7 +162,7 @@
     src: dovecot/dovecot-sql.conf.ext.j2
     dest: /etc/dovecot/dovecot-sql.conf.ext
     owner: root
-    group: root
+    group: wheel
     mode: 0644
   when: not dovecot_sql.stat.exists
 
@@ -171,7 +171,7 @@
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     owner: root
-    group: root
+    group: wheel
     mode: 0644
   with_items:
     - {src: 'postfix/header_checks', dest: '/etc/postfix/header_checks'}
@@ -183,7 +183,7 @@
     src: postfix/main.cf.j2
     dest: /etc/postfix/main.cf
     owner: root
-    group: root
+    group: wheel
     mode: 0644
 
 - name: Copy postfix master configuration.
@@ -191,7 +191,7 @@
     src: postfix/master.cf
     dest: /etc/postfix/master.cf
     owner: root
-    group: root
+    group: wheel
     mode: 0644
 
 - name: Copy mailname.
@@ -199,7 +199,7 @@
     src: postfix/mailname.j2
     dest: /etc/mailname
     owner: root
-    group: root
+    group: wheel
     mode: 0644
 
 - name: Copy postfix virtual mailbox mapping.
@@ -207,7 +207,7 @@
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     owner: root
-    group: root
+    group: wheel
     mode: 0644
   with_items:
     - {src: 'postfix/mysql-virtual-alias-maps.cf.j2', dest: '/etc/postfix/mysql-virtual-alias-maps.cf'}
@@ -217,7 +217,7 @@
 
 - name: Whitelist policyd IPs from No-IP backup SMTP.
   ansible.builtin.lineinfile:
-    dest: /etc/postfix-policyd-spf-python/policyd-spf.conf
+    dest: /etc/python-policyd-spf/policyd-spf.conf
     regexp: "^skip_addresses "
     line: "skip_addresses = 127.0.0.0/8,::ffff:127.0.0.0/104,::1,8.23.224.50,69.65.5.119,69.65.5.110"
     state: present

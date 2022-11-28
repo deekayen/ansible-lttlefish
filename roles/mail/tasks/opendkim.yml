@@ -5,7 +5,7 @@
     src: opendkim/opendkim.conf
     dest: /etc/opendkim.conf
     owner: root
-    group: root
+    group: wheel
     mode: 0644
 
 - name: Make opendkim listen on loopback on port 12345.

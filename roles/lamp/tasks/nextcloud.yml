@@ -5,7 +5,7 @@
     name: "{{ item }}"
     state: present
   with_items:
-    - nextcloud
+    - nextcloud--24
     - clamav
   register: nextcloud_install_packages
 

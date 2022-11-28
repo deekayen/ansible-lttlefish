@@ -49,13 +49,13 @@
 #    dest: /etc/apache2/ports.conf
 #    mode: 0644
 
-- name: "Install PHP graphics lib dependencies."
-  community.general.openbsd_pkg:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - djvulibre
-    - freetype
+#- name: "Install PHP graphics lib dependencies."
+#  community.general.openbsd_pkg:
+#    name: "{{ item }}"
+#    state: present
+#  with_items:
+#    - djvulibre
+#    - freetype
 
 - name: "Install PHP."
   community.general.openbsd_pkg:
@@ -65,18 +65,15 @@
     - php-apache%8.0
     - pear
     - php-curl%8.0
-    - php-gd%8.0
-    - pecl80-imagick
     - php-intl%8.0
     - pecl80-mcrypt
     - php-mysqli%8.0
-    - php-pgsql%8.0
     - php-sqlite3%8.0
   notify: restart apache2
 
 - name: Check if MariaDB is already installed.
   ansible.builtin.stat:
-    path: /etc/init.d/mysql
+    path: /etc/rc.d/mysqld
   register: mariadb_installed
 
 - name: Install MariaDB Server.
@@ -89,8 +86,13 @@
     - py3-mysqlclient
   register: mariadb_install_packages
 
+- name: Create default mysqld database.
+  ansible.builtin.command:
+    cmd: /usr/local/bin/mariadb-install-db
+    creates: /var/mysql/mysql
+
 - include_tasks: squirrelmail.yml
 - include_tasks: secure-apache.yml
 - include_tasks: secure-mariadb.yml
 - include_tasks: hosts.yml
-- include_tasks: nextcloud.yml
+#- include_tasks: nextcloud.yml

@@ -36,6 +36,7 @@ is treated as the master copy of the passwords on these files:
 
 ## System setup
 
+This setup filled the `/usr/local`.
 ```
 lttlefish# df -h
 Filesystem     Size    Used   Avail Capacity  Mounted on
@@ -47,3 +48,32 @@ Filesystem     Size    Used   Avail Capacity  Mounted on
 /dev/wd0g      989M    2.0K    940M     0%    /usr/src
 /dev/wd0i     13.3G   60.9M   12.5G     0%    /var
 ```
+
+This is setup for a 2G shared linode.
+```
+lttlefish# df -h
+Filesystem     Size    Used   Avail Capacity  Mounted on
+/dev/wd0a      989M   74.9M    865M     8%    /
+/dev/wd0e      1.1G   18.0K    1.0G     0%    /home
+/dev/wd0d      1.5G   10.0K    1.5G     0%    /tmp
+/dev/wd0f      4.8G    1.2G    3.4G    27%    /usr
+/dev/wd0g      6.5G    218K    6.2G     0%    /usr/local
+/dev/wd0h     30.4G    5.9M   28.9G     0%    /var
+```
+
+## Bootstrapping from scratch
+
+* Add authorized_keys to ~/.ssh/
+* Install python3 so Ansible has an interpreter
+  * `pkg_add python3`
+  * `pkg_add py3-pip`
+* Create a cert
+  * `pkg_add certbot`
+  * `certbot certonly`
+
+    lttlefish# cd /etc/apache2/
+    lttlefish# ls
+    extra       httpd2.conf magic       mime.types
+    lttlefish# ln -s /etc/letsencrypt/live/deekayen.net/fullchain.pem server.crt
+    lttlefish# ln -s /etc/letsencrypt/live/deekayen.net/privkey.pem server.key
+

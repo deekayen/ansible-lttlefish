@@ -2,14 +2,14 @@
 
 - name: Set ServerSignature.
   ansible.builtin.lineinfile:
-    dest: /etc/apache2/conf-available/security.conf
+    dest: /etc/apache2/extra/httpd-default.conf
     regexp: "^ServerSignature "
     line: "ServerSignature Off"
     state: present
 
 - name: Set ServerTokens.
   ansible.builtin.lineinfile:
-    dest: /etc/apache2/conf-available/security.conf
+    dest: /etc/apache2/extra/httpd-default.conf
     regexp: "^ServerTokens "
     line: "ServerTokens Prod"
     state: present
