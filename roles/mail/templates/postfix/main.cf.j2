@@ -1,12 +1,94 @@
-# See /usr/share/postfix/main.cf.dist for a commented, more complete version
+# Global Postfix configuration file. This file lists only a subset
+# of all parameters. For the syntax, and for a complete parameter
+# list, see the postconf(5) manual page (command: "man 5 postconf").
+#
+# TIP: use the command "postconf -n" to view main.cf parameter
+# settings, "postconf parametername" to view a specific parameter,
+# and "postconf 'parametername=value'" to set a specific parameter.
+#
+# For common configuration examples, see BASIC_CONFIGURATION_README
+# and STANDARD_CONFIGURATION_README. To find these documents, use
+# the command "postconf html_directory readme_directory", or go to
+# http://www.postfix.org/BASIC_CONFIGURATION_README.html etc.
+#
+# For best results, change no more than 2-3 parameters at a time,
+# and test if Postfix still works after every change.
 
+# COMPATIBILITY
+#
+# The compatibility_level determines what default settings Postfix
+# will use for main.cf and master.cf settings. These defaults will
+# change over time.
+#
+# To avoid breaking things, Postfix will use backwards-compatible
+# default settings and log where it uses those old backwards-compatible
+# default settings, until the system administrator has determined
+# if any backwards-compatible default settings need to be made
+# permanent in main.cf or master.cf.
+#
+# When this review is complete, update the compatibility_level setting
+# below as recommended in the RELEASE_NOTES file.
+#
+# The level below is what should be used with new (not upgrade) installs.
+#
+compatibility_level = 3.7
 
-# Debian specific:  Specifying a file name will cause the first
-# line of that file to be used as the name.  The Debian default
-# is /etc/mailname.
-#myorigin = /etc/mailname
+# SOFT BOUNCE
+#
+# The soft_bounce parameter provides a limited safety net for
+# testing.  When soft_bounce is enabled, mail will remain queued that
+# would otherwise bounce. This parameter disables locally-generated
+# bounces, and prevents the SMTP server from rejecting mail permanently
+# (by changing 5xx replies into 4xx replies). However, soft_bounce
+# is no cure for address rewriting mistakes or mail routing mistakes.
+#
+#soft_bounce = no
 
-smtpd_banner = $myhostname ESMTP $mail_name (Debian/GNU)
+# LOCAL PATHNAME INFORMATION
+#
+# The queue_directory specifies the location of the Postfix queue.
+# This is also the root directory of Postfix daemons that run chrooted.
+# See the files in examples/chroot-setup for setting up Postfix chroot
+# environments on different UNIX systems.
+#
+queue_directory = /var/spool/postfix
+
+# The command_directory parameter specifies the location of all
+# postXXX commands.
+#
+command_directory = /usr/local/sbin
+
+# The daemon_directory parameter specifies the location of all Postfix
+# daemon programs (i.e. programs listed in the master.cf file). This
+# directory must be owned by root.
+#
+daemon_directory = /usr/local/libexec/postfix
+
+# The data_directory parameter specifies the location of Postfix-writable
+# data files (caches, random numbers). This directory must be owned
+# by the mail_owner account (see below).
+#
+data_directory = /var/postfix
+
+# QUEUE AND PROCESS OWNERSHIP
+#
+# The mail_owner parameter specifies the owner of the Postfix queue
+# and of most Postfix daemon processes.  Specify the name of a user
+# account THAT DOES NOT SHARE ITS USER OR GROUP ID WITH OTHER ACCOUNTS
+# AND THAT OWNS NO OTHER FILES OR PROCESSES ON THE SYSTEM.  In
+# particular, don't specify nobody or daemon. PLEASE USE A DEDICATED
+# USER.
+#
+mail_owner = _postfix
+
+# The default_privs parameter specifies the default rights used by
+# the local delivery agent for delivery to external file or command.
+# These rights are used in the absence of a recipient user context.
+# DO NOT SPECIFY A PRIVILEGED USER OR THE POSTFIX OWNER.
+#
+#default_privs = nobody
+
+smtpd_banner = $myhostname ESMTP $mail_name (OpenBSD/$mail_version)
 biff = no
 
 # 100M
@@ -23,12 +105,10 @@ readme_directory = no
 # TLS parameters
 smtpd_tls_cert_file=/etc/ssl/private/deekayen.chained.crt
 smtpd_tls_key_file=/etc/ssl/private/deekayen.key
-smtpd_use_tls=yes
-#smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
-#smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
-smtpd_tls_auth_only=yes
 smtpd_tls_security_level=may
-smtpd_tls_ciphers = high
+smtpd_tls_auth_only=yes
+smtpd_tls_ciphers = medium
+smtpd_tls_eecdh_grade = strong
 smtpd_tls_exclude_ciphers = SEED, CAMELLIA, aNULL, eNULL, EXPORT, DES, RC4, MD5, PSK, aECDH, EDH-DSS-DES-CBC3-SHA, EDH-RSA-DES-CDC3-SHA, KRB5-DE5, CBC3-SHA, ECDHE-RSA-DES-CBC3-SHA, EDH-RSA-DES-CBC3-SHA, DES-CBC3-SHA
 #Seems like Vanguard might only support SSLv3
 smtpd_tls_protocols = !SSLv2, !SSLv3
@@ -37,7 +117,8 @@ smtpd_tls_protocols = !SSLv2, !SSLv3
 #smtpd_tls_mandatory_exclude_ciphers = SEED, CAMELLIA, aNULL, eNULL, EXPORT, DES, RC4, MD5, PSK, aECDH, EDH-DSS-DES-CBC3-SHA, EDH-RSA-DES-CDC3-SHA, KRB5-DE5, CBC3-SHA, ECDHE-RSA-DES-CBC3-SHA, EDH-RSA-DES-CBC3-SHA, DES-CBC3-SHA
 #smtpd_tls_mandatory_protocols = !SSLv2, !SSLv3
 tls_preempt_cipherlist=yes
-smtpd_tls_dh1024_param_file = /etc/ssl/dh3072.pem
+smtpd_tls_dh1024_param_file = /etc/postfix/dh2048.pem
+smtpd_tls_dh512_param_file = /etc/postfix/dh512.pem
 
 # See /usr/share/doc/postfix/TLS_README.gz in the postfix-doc package for
 # information on enabling SSL in the smtp client.
@@ -48,8 +129,8 @@ smtpd_sasl_path = private/auth
 smtpd_sasl_auth_enable = yes
 
 # David's custom abuse settings
-smtpd_client_connection_rate_limit = 20
-smtpd_client_message_rate_limit = 20
+smtpd_client_connection_rate_limit = 25
+smtpd_client_message_rate_limit = 25
 
 header_checks = regexp:/etc/postfix/header_checks
 body_checks = regexp:/etc/postfix/body_checks
@@ -144,3 +225,9 @@ non_smtpd_milters = inet:localhost:12345
 anvil_rate_time_unit = 10s
 
 smtpd_relay_restrictions = permit_sasl_authenticated, permit_mynetworks, reject_unauth_destination
+
+# readme_directory: The location of the Postfix README files.
+#
+readme_directory = /usr/local/share/doc/postfix/readme
+shlib_directory = no
+meta_directory = /etc/postfix

@@ -8,13 +8,40 @@
     - dovecot
     - dovecot-mysql
 
+- name: "rcctl stop smtpd; rcctl disable smtpd"
+  service:
+    name: smtpd
+    state: stopped
+    enabled: no
+
 - name: Install Postfix.
   community.general.openbsd_pkg:
     name: "{{ item }}"
     state: present
   with_items:
-    - postfix%stable,mysql
+    - postfix--mysql%stable
     - py-policyd-spf
+
+- name: Stat /etc/mailer.conf.postfix
+  stat:
+    path: /etc/mailer.conf.postfix
+  register: postfix_mailer_conf
+
+- name: /usr/local/sbin/postfix-enable
+  block:
+  - name: Move default mailer config to .pre-postfix
+    command: mv -f /etc/mailer.conf /etc/mailer.conf.pre-postfix
+
+  - name: Move postfix mailer config into place.
+    command: mv -f /etc/mailer.conf.postfix /etc/mailer.conf
+
+  when: postfix_mailer_conf.stat.exists
+
+- name: "rcctl enable postfix; rcctl start postfix"
+  service:
+    name: postfix
+    state: started
+    enabled: yes
 
 - name: Install ClamAV.
   community.general.openbsd_pkg:
@@ -85,6 +112,16 @@
   community.crypto.openssl_dhparam:
     path: /etc/dovecot/dh.pem
     size: 2048
+
+- name: Generate DH Parameters for Postfix.
+  community.crypto.openssl_dhparam:
+    path: /etc/postfix/dh2048.pem
+    size: 2048
+
+- name: Generate export-level DH Parameters for Postfix.
+  community.crypto.openssl_dhparam:
+    path: /etc/postfix/dh512.pem
+    size: 512
 
 - name: Copy Dovecot configuration files.
   ansible.builtin.copy:
