@@ -69,6 +69,10 @@
     dest: /tmp/mailserver.sql
     mode: 0644
 
+- name: Install PyMySQL for mysql_db ansible support.
+  pip:
+    name: PyMySQL
+
 - name: Create a database for mail configuration.
   mysql_db:
     name: "{{ mailserver_dbname }}"
