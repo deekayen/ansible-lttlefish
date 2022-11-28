@@ -8,9 +8,10 @@
     group: wheel
     mode: 0644
 
-- name: Make opendkim listen on loopback on port 12345.
-  ansible.builtin.lineinfile:
-    dest: /etc/default/opendkim
-    regexp: "^SOCKET"
-    line: 'SOCKET="inet:12345@localhost"'
-    state: present
+# Moved to opendkim.conf in OpenBSD
+#- name: Make opendkim listen on loopback on port 12345.
+#  ansible.builtin.lineinfile:
+#    dest: /etc/default/opendkim
+#    regexp: "^SOCKET"
+#    line: 'SOCKET="inet:12345@localhost"'
+#    state: present
