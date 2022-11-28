@@ -8,10 +8,20 @@
     - apache-httpd
     - apachetop
 
-- name: Enable SSL module.
-  apache2_module:
+# Ansible's apache2_module doesn't work on OpenBSD's design.
+- name: Enable socache_shmcb module.
+  ansible.builtin.lineinfile:
+    dest: /etc/apache2/httpd2.conf
+    regexp: "^#LoadModule socache_shmcb_module /usr/local/lib/apache2/mod_socache_shmcb.so"
+    line: "LoadModule socache_shmcb_module /usr/local/lib/apache2/mod_socache_shmcb.so"
     state: present
-    name: ssl
+
+- name: Enable SSL module.
+  ansible.builtin.lineinfile:
+    dest: /etc/apache2/httpd2.conf
+    regexp: "^#LoadModule ssl_module /usr/local/lib/apache2/mod_ssl.so"
+    line: "LoadModule ssl_module /usr/local/lib/apache2/mod_ssl.so"
+    state: present
 
 - name: Enable Apache headers module.
   apache2_module:
