@@ -8,6 +8,11 @@
     - apache-httpd
     - apachetop
 
+- name: Enable SSL module.
+  apache2_module:
+    state: present
+    name: ssl
+
 - name: Enable Apache headers module.
   apache2_module:
     state: present

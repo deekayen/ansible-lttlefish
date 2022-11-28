@@ -28,8 +28,3 @@
   apache2_module:
     state: absent
     name: cgi
-
-- name: Enable SSL module.
-  apache2_module:
-    state: present
-    name: ssl

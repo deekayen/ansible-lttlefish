@@ -103,8 +103,8 @@ append_dot_mydomain = no
 readme_directory = no
 
 # TLS parameters
-smtpd_tls_cert_file=/etc/ssl/private/deekayen.chained.crt
-smtpd_tls_key_file=/etc/ssl/private/deekayen.key
+smtpd_tls_cert_file=/etc/letsencrypt/live/deekayen.net/fullchain.pem
+smtpd_tls_key_file=/etc/letsencrypt/live/deekayen.net/privkey.pem
 smtpd_tls_security_level=may
 smtpd_tls_auth_only=yes
 smtpd_tls_ciphers = medium

@@ -8,5 +8,5 @@
     - ntp
     - security
     - openvpn
-    - mail
     - lamp
+    - mail
