@@ -27,13 +27,13 @@
   when: not nextcloud_conf.stat.exists
 
 - name: Create a database for NextCloud.
-  mysql_db:
+  community.mysql.mysql_db:
     name: "{{ nextcloud_dbname }}"
     state: present
   when: nextcloud_install_packages.changed
 
 - name: Create a database user for NextCloud.
-  mysql_user:
+  community.mysql.mysql_user:
     name: "{{ nextcloud_dbuser }}"
     password: "{{ nextcloud_dbpass.stdout }}"
     priv: "nextcloud.*:ALL"

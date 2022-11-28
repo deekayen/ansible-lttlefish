@@ -71,17 +71,19 @@
 
 - name: Install PyMySQL for mysql_db ansible support.
   pip:
-    name: PyMySQL
+    name:
+      - PyMySQL
+      - mysqlclient
 
 - name: Create a database for mail configuration.
-  mysql_db:
+  community.mysql.mysql_db:
     name: "{{ mailserver_dbname }}"
     state: present
   register: mailserver_db_created
 
 - name: Import mailserver database tables.
   # The import SQL file should have IF EXISTS on each CREATE.
-  mysql_db:
+  community.mysql.mysql_db:
     name: "{{ mailserver_dbname }}"
     state: import
     target: /tmp/mailserver.sql
@@ -105,7 +107,7 @@
   when: not dovecot_sql.stat.exists
 
 - name: Create a database user for mail.
-  mysql_user:
+  community.mysql.mysql_user:
     name: "{{ mailserver_dbuser }}"
     password: "{{ mailserver_dbpass.stdout }}"
     priv: "{{ mailserver_dbname }}.*:SELECT"
