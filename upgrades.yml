@@ -8,3 +8,4 @@
       command: /usr/sbin/pkg_add -u
     - name: syspatch
       command: /usr/sbin/syspatch
+      ignore_errors: true

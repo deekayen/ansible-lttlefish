@@ -63,6 +63,7 @@ Filesystem     Size    Used   Avail Capacity  Mounted on
 
 ## Bootstrapping from scratch
 
+* Install everything for OS, minus games, xserv, and xshare. xbase and xfont are needed for gd and imagemagik.
 * Add authorized_keys to ~/.ssh/
 * Install python3 so Ansible has an interpreter
   * `pkg_add python3`

@@ -80,6 +80,7 @@ data_directory = /var/postfix
 # USER.
 #
 mail_owner = _postfix
+setgid_group = _postdrop
 
 # The default_privs parameter specifies the default rights used by
 # the local delivery agent for delivery to external file or command.
@@ -99,8 +100,6 @@ append_dot_mydomain = no
 
 # Uncomment the next line to generate "delayed mail" warnings
 #delay_warning_time = 4h
-
-readme_directory = no
 
 # TLS parameters
 smtpd_tls_cert_file=/etc/letsencrypt/live/deekayen.net/fullchain.pem
@@ -191,7 +190,7 @@ myorigin = /etc/mailname
 mydestination = localhost
 relayhost =
 {% if ansible_default_ipv6.address is defined %}
-mynetworks = 127.0.0.0/8 {{ ansible_default_ipv4.address|default("0.0.0.0") }}/32 [::ffff:127.0.0.0]/104 [::1]/128 [{{ ansible_default_ipv6.address|default("::") }}]/128
+mynetworks = 127.0.0.0/8 {{ ansible_default_ipv4.address|default("0.0.0.0") }}/32 [::ffff:127.0.0.0]/104 [::1]/128
 {% else %}
 mynetworks = 127.0.0.0/8 {{ ansible_default_ipv4.address|default("0.0.0.0") }}/32
 {% endif %}
@@ -200,7 +199,7 @@ mailbox_size_limit = 0
 recipient_delimiter = +
 inet_protocols = all
 {% if ansible_default_ipv6.address is defined %}
-inet_interfaces = {{ ansible_default_ipv4.address|default("0.0.0.0") }} [{{ ansible_default_ipv6.address|default("::") }}]
+inet_interfaces = {{ ansible_default_ipv4.address|default("0.0.0.0") }}
 {% else %}
 inet_interfaces = {{ ansible_default_ipv4.address|default("0.0.0.0") }}
 {% endif %}

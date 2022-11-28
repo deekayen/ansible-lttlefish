@@ -69,6 +69,7 @@
     - pecl80-mcrypt
     - php-mysqli%8.0
     - php-sqlite3%8.0
+    - phpmyadmin
   notify: restart apache2
 
 - name: Check if MariaDB is already installed.
